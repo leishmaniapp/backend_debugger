@@ -1,0 +1,48 @@
+name: ws_debugger
+description: "Leishmaniapp analysis backend debugger with WebSockets"
+version: 1.0.0+1
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.3.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # structured logging for debugging
+  logger: ^2.1.0
+  # state management
+  provider: ^6.1.2
+  # Functional tools for error handling
+  fpdart: ^1.1.0
+  # dependency injection
+  get_it: ^7.6.7
+  # shared schema definition
+  protobuf: ^3.1.0
+  # boilerplate code reduction
+  awesome_flutter_extensions: ^1.2.0
+  # JWT authentication token parsing
+  dart_jsonwebtoken: ^2.13.0
+  # HTTP requests and codes for authentication API
+  http: ^1.2.1
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # recommended lints to encourage good coding practices
+  flutter_lints: ^3.0.0
+  # protobuf schema compiler
+  protoc_plugin: ^21.1.2
+  # automated static assets compilation
+  build_runner: ^2.4.8
+  # protobuf compiler automation with build_runner
+  protoc_builder: ^0.4.1
+
+flutter:
+  uses-material-design: true
