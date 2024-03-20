@@ -2,9 +2,9 @@ import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:ws_debugger/provider/auth_provider.dart';
-import 'package:ws_debugger/services/interfaces/auth_service.dart';
-import 'package:ws_debugger/views/main_view.dart';
+import 'package:backend_debugger/provider/auth_provider.dart';
+import 'package:backend_debugger/services/interfaces/auth_service.dart';
+import 'package:backend_debugger/views/main_view.dart';
 
 /// Main application widget
 class Application extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:ws_debugger/errors/generic_error.dart';
+import 'package:backend_debugger/errors/generic_error.dart';
 
 class InvalidStateError extends GenericError {
   String what;

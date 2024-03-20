@@ -1,5 +1,5 @@
-name: ws_debugger
-description: "Leishmaniapp analysis backend debugger with WebSockets"
+name: backend_debugger
+description: "Leishmaniapp cloud analysis backend debugging tool"
 version: 1.0.0+1
 
 # The following line prevents the package from being accidentally published to

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
-import 'package:ws_debugger/views/auth_view.dart';
+import 'package:backend_debugger/views/auth_view.dart';
 
 class MainView extends StatelessWidget {
   const MainView({super.key});
@@ -24,7 +24,7 @@ class MainView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Welcome to the WebSockets analysis backend debugging tool",
+                    "Cloud analysis backend debugger",
                     style: context.textStyles.headlineSmall,
                     textAlign: TextAlign.center,
                   ),

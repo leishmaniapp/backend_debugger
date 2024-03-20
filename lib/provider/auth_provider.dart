@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:ws_debugger/errors/network/network_error.dart';
-import 'package:ws_debugger/services/interfaces/auth_service.dart';
+import 'package:backend_debugger/errors/network/network_error.dart';
+import 'package:backend_debugger/services/interfaces/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
   AuthProvider(this._authService);
@@ -16,8 +16,8 @@ class AuthProvider with ChangeNotifier {
   String get authSchema => _authService.authSchema.toString();
 
   Future<Option<NetworkError>> login(
-      Uri url, String username, String password) async {
-    switch (await _authService.authenticate(url, username, password)) {
+      Uri url, String email, String password) async {
+    switch (await _authService.authenticate(url, email, password)) {
       // An error was returned
       case Left(value: final l):
         _token = null;

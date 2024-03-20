@@ -1,4 +1,4 @@
-import 'package:ws_debugger/errors/network/network_error.dart';
+import 'package:backend_debugger/errors/network/network_error.dart';
 
 class FailedConnectionError extends NetworkError {
   final String where;

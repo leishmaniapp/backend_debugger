@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:provider/provider.dart';
-import 'package:ws_debugger/provider/auth_provider.dart';
-import 'package:ws_debugger/widgets/blockquote.dart';
+import 'package:backend_debugger/provider/auth_provider.dart';
+import 'package:backend_debugger/widgets/blockquote.dart';
 import 'package:fpdart/fpdart.dart' as fn;
 
 class AuthView extends StatefulWidget {
@@ -54,13 +54,13 @@ class _AuthViewState extends State<AuthView> {
                   ),
                   Row(
                     children: [
-                      // Username
+                      // email
                       Expanded(
                         child: TextField(
                           keyboardType: TextInputType.text,
                           controller: textUserController,
                           decoration: const InputDecoration(
-                            hintText: "Username",
+                            hintText: "Email",
                             border: OutlineInputBorder(),
                           ),
                         ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:ws_debugger/application.dart';
-import 'package:ws_debugger/services/implementation/http_auth_service.dart';
-import 'package:ws_debugger/services/interfaces/auth_service.dart';
+import 'package:backend_debugger/application.dart';
+import 'package:backend_debugger/services/implementation/http_auth_service.dart';
+import 'package:backend_debugger/services/interfaces/auth_service.dart';
 
 void main() {
   // Create the logger and register it

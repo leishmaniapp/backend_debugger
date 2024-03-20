@@ -1,1 +1,3 @@
-# Leishmaniapp - WebSockets analysis backend debugger
+# Leishmaniapp - cloud analysis backend debugging tool
+
+## Protobuf Schema
