@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'dart:developer';
 
+import 'package:backend_debugger/widgets/ticker.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:provider/provider.dart';
@@ -255,26 +255,20 @@ class _AuthViewState extends State<AuthView> {
                       "exp: ${context.watch<AuthProvider>().tokenPayload?.exp.toInt().toUnixTime().toString() ?? "Expiration Time"}",
                 ),
 
-                StatefulBuilder(
-                  builder: (context, setState) {
-                    // Initial remain
-                    var remain = context.watch<AuthProvider>().remaining ??
-                        Duration.zero;
-
-                    // Create a periodic timer
-                    Timer.periodic(
-                      const Duration(seconds: 1),
-                      (callback) => setState(
-                          () => (remain -= const Duration(seconds: 1))),
-                    );
-
-                    return Blockquote(
-                      title: "Remaining valid token time",
-                      text:
-                          "inMinutes: ${remain.inMinutes}\ninSeconds: ${remain.inSeconds}",
-                    );
-                  },
-                ),
+                if (context.watch<AuthProvider>().authenticated)
+                  TickerBuilder(
+                    updateRate: const Duration(seconds: 1),
+                    initialValue: context.watch<AuthProvider>().remaining!,
+                    computeValue: (current) =>
+                        (current - const Duration(seconds: 1)),
+                    builder: (context, remain) {
+                      return Blockquote(
+                        title: "Remaining valid token time",
+                        text:
+                            "inMinutes: ${remain.inMinutes}\ninSeconds: ${remain.inSeconds}",
+                      );
+                    },
+                  ),
               ].separatedBy(const SizedBox(height: 8)),
             ),
           ),
