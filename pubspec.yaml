@@ -29,6 +29,7 @@ dependencies:
   dart_jsonwebtoken: ^2.13.0
   # HTTP requests and codes for authentication API
   http: ^1.2.1
+  unixtime: ^1.0.0
   
 
 dev_dependencies:

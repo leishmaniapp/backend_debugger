@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
@@ -27,14 +28,22 @@ final class HttpAuthService implements IAuthService {
         password: password,
       ).toProto3Json();
 
+      // Parse it to JSON
+      final json = jsonEncode(request);
+
       // Send request
-      final result = await http.post(url, body: request);
+      final result = await http.post(url, body: json);
 
       // Parse response
       if (result.statusCode == HttpStatus.ok) {
         return Either.right(result.body);
       } else {
-        return Either.left(HttpError(result.statusCode));
+        return Either.left(
+          HttpError(
+            result.statusCode,
+            body: result.body.isEmpty ? null : result.body,
+          ),
+        );
       }
     } on http.ClientException catch (e) {
       return Either.left(FailedConnectionError(e.uri.toString()));
