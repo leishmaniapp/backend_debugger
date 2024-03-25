@@ -119,8 +119,12 @@ class _AuthViewState extends State<AuthView> {
 
                 // Show authentication schema
                 Blockquote(
-                    title: "Current authentication schema",
-                    text: context.read<AuthProvider>().authSchema),
+                    title: "Current [auth.AuthRequest] schema",
+                    text: context.read<AuthProvider>().authRequestSchema),
+
+                Blockquote(
+                    title: "Current [auth.AuthResponse] schema",
+                    text: context.read<AuthProvider>().authResponseSchema),
 
                 // Action buttons
                 Padding(

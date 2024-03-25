@@ -11,6 +11,7 @@ void main() {
     printer: PrettyPrinter(),
     level: Level.all,
   ));
+
   // Register services
   GetIt.I.registerSingleton<IAuthService>(HttpAuthService());
 

@@ -1,11 +1,11 @@
+import 'package:backend_debugger/proto/auth.pbserver.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:backend_debugger/errors/network/network_error.dart';
 
-typedef TokenStr = String;
-
 abstract interface class IAuthService {
-  Future<Either<NetworkError, TokenStr>> authenticate(
-      Uri url, String email, String password);
+  Future<Either<NetworkError, AuthResponse>> authenticate(
+      Uri url, AuthRequest request);
 
-  Map<String, Type> get authSchema;
+  Map<String, dynamic> get authRequestSchema;
+  Map<String, dynamic> get authResponseSchema;
 }

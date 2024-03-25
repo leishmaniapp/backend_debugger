@@ -17,7 +17,8 @@ class AuthProvider with ChangeNotifier {
   bool get authenticated => _token != null;
 
   // Authentication schema from proto
-  String get authSchema => _authService.authSchema.toString();
+  String get authRequestSchema => _authService.authRequestSchema.toString();
+  String get authResponseSchema => _authService.authResponseSchema.toString();
 
   // Parsed token
   JWT? get parsedToken => _token == null ? null : JWT.decode(_token!);
@@ -42,7 +43,8 @@ class AuthProvider with ChangeNotifier {
 
   Future<Option<NetworkError>> login(
       Uri url, String email, String password) async {
-    switch (await _authService.authenticate(url, email, password)) {
+    switch (await _authService.authenticate(
+        url, AuthRequest(email: email, password: password))) {
       // An error was returned
       case Left(value: final l):
         _token = null;
@@ -50,8 +52,8 @@ class AuthProvider with ChangeNotifier {
         return Option.of(l);
 
       // A token was returned
-      case Right(value: final tkn):
-        _token = tkn;
+      case Right(value: final res):
+        _token = res.token;
         notifyListeners();
         return const Option.none();
     }
