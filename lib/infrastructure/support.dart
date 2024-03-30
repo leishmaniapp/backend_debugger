@@ -1,4 +1,4 @@
-import 'package:backend_debugger/exception.dart';
+import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/infrastructure/grpc/auth_service.dart';
 import 'package:backend_debugger/infrastructure/grpc/grpc_service.dart';
 import 'package:backend_debugger/services/auth_service.dart';
@@ -36,6 +36,7 @@ class SupportedInfrastructure {
                     channel,
                   )),
         // None matched
-        _ => Either.left(InvalidScheme(server.scheme, supported.toString())),
+        _ => Either.left(
+            InvalidSchemeException(server.scheme, supported.toString())),
       };
 }

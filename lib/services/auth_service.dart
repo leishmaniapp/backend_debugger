@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:backend_debugger/exception.dart';
+import 'package:backend_debugger/exception/exception.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class IAuthService {

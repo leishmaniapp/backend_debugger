@@ -1,4 +1,4 @@
-import 'package:backend_debugger/exception.dart';
+import 'package:backend_debugger/exception/exception.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:backend_debugger/exception.dart';
+import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/infrastructure/grpc/grpc_service.dart';
 import 'package:backend_debugger/proto/auth.pbgrpc.dart';
 import 'package:backend_debugger/services/auth_service.dart';

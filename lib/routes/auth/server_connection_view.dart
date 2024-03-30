@@ -14,50 +14,45 @@ class AuthServerConnectionView extends StatelessWidget {
     // Controller for the 'Server URI' field
     final TextEditingController textController = TextEditingController();
 
-    return Center(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 500),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Connect to the authentication server",
-              style: context.textStyles.bodyLarge,
-            ),
-            TextField(
-              controller: textController,
-              keyboardType: TextInputType.url,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text("Server connection URI"),
-                hintText: "rpc://127.0.0.1:8080",
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: FilledButton.icon(
-                label: const Text("Connect"),
-                icon: const Icon(Icons.electrical_services_rounded),
-                onPressed: () {
-                  try {
-                    // Parse the Server URI and send it
-                    onServerProvided(Uri.parse(textController.value.text));
-                  }
-                  // Catch the exceptions
-                  on Exception catch (e) {
-                    // Show an exception dialog
-                    GetIt.I.get<Logger>().e(e.toString());
-                    showDialog(
-                      context: context,
-                      builder: (context) => ExceptionAlertDialog(e),
-                    );
-                  }
-                },
-              ),
-            ),
-          ].separatedBy(const SizedBox(height: 10.0)),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "Connect to the authentication server",
+          style: context.textStyles.bodyLarge,
         ),
-      ),
+        TextField(
+          controller: textController,
+          keyboardType: TextInputType.url,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            label: Text("Server connection URI"),
+            hintText: "rpc://127.0.0.1:8080",
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: FilledButton.icon(
+            label: const Text("Connect"),
+            icon: const Icon(Icons.electrical_services_rounded),
+            onPressed: () {
+              try {
+                // Parse the Server URI and send it
+                onServerProvided(Uri.parse(textController.value.text));
+              }
+              // Catch the exceptions
+              on Exception catch (e) {
+                // Show an exception dialog
+                GetIt.I.get<Logger>().e(e.toString());
+                showDialog(
+                  context: context,
+                  builder: (context) => ExceptionAlertDialog(e),
+                );
+              }
+            },
+          ),
+        ),
+      ].separatedBy(const SizedBox(height: 10.0)),
     );
   }
 }

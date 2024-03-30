@@ -8,10 +8,9 @@ abstract class ProviderWithService<S> with ChangeNotifier {
   ProviderWithService(this._service);
 
   /// Check if the provided service is enabled (is not null)
-  bool get hasService => service != null;
+  bool get hasService => _service != null;
 
   S? _service;
-  S? get service => _service;
   // Replace old service with new service
   set service(S? service) {
     GetIt.I.get<Logger>().i(
@@ -19,6 +18,10 @@ abstract class ProviderWithService<S> with ChangeNotifier {
     _service = service;
     notifyListeners();
   }
+
+  /// Get the non-null service
+  @protected
+  S get service => _service!;
 
   /// Request the service to [SupportedInfrastructure]
   Option<Exception> requestServiceFromInfrastructureWithUri(Uri server);

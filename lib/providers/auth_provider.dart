@@ -15,4 +15,10 @@ class AuthProvider extends ProviderWithService<IAuthService> {
         service = r;
         return const Option.none();
       });
+
+  bool get authenticated => service.authenticated;
+
+  void authenticate(String email, String password) async {
+    service.authenticated;
+  }
 }
