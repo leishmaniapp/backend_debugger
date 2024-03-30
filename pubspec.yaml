@@ -19,30 +19,36 @@ dependencies:
   provider: ^6.1.2
   # Functional tools for error handling
   fpdart: ^1.1.0
+  # Dart language extensions
+  screwdriver: ^5.3.1
   # dependency injection
   get_it: ^7.6.7
-  # shared schema definition
-  protobuf: ^3.1.0
-  # boilerplate code reduction
+  # Boilerplate code reduction
   awesome_flutter_extensions: ^1.2.0
   # JWT authentication token parsing
   dart_jsonwebtoken: ^2.13.0
-  # HTTP requests and codes for authentication API
-  http: ^1.2.1
+  # Parse Unix timestamps
   unixtime: ^1.0.0
+
+  # shared schema definition
+  protobuf: ^3.1.0
+  # communication protocol with the backend
+  grpc: ^3.2.4
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # recommended lints to encourage good coding practices
+  # Testing framework
+  test: ^1.24.9
+  # Recommended lints to encourage good coding practices
   flutter_lints: ^3.0.0
-  # protobuf schema compiler
+  # Protobuf schema compiler
   protoc_plugin: ^21.1.2
-  # automated static assets compilation
+  # Automated static assets compilation
   build_runner: ^2.4.8
-  # protobuf compiler automation with build_runner
+  # Protobuf compiler automation with build_runner
   protoc_builder: ^0.4.1
 
 flutter:
