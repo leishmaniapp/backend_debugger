@@ -15,6 +15,7 @@ part 'network/server/undefined_server_exception.dart';
 part 'network/server/auth/auth_exception.dart';
 part 'network/server/auth/invalid_credentials_exception.dart';
 part 'network/server/auth/invalid_token_exception.dart';
+part 'network/server/auth/unauthenticated_exception.dart';
 
 /// Custom type of exception only for the application to use
 sealed class CustomException

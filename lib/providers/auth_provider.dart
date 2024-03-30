@@ -7,6 +7,7 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:screwdriver/screwdriver.dart';
 
 class AuthProvider extends ProviderWithService<IAuthService> {
   AuthProvider({IAuthService? service}) : super(service);
@@ -38,7 +39,7 @@ class AuthProvider extends ProviderWithService<IAuthService> {
       (o, s) => o as Exception);
 
   /// Authenticate in remote server
-  Future<Option<NetworkException>> authenticate(
+  Future<Option<CustomException>> authenticate(
           String email, String password) async =>
       (await service.authenticate(email, password)).match((l) => Option.of(l),
           (token) {
@@ -48,6 +49,15 @@ class AuthProvider extends ProviderWithService<IAuthService> {
         GetIt.I.get<Logger>().i("Authenticated with token ($token)");
         return const Option.none();
       });
+
+  Future<Option<CustomException>> verifyToken() async => _authToken.isNull
+      ? Option.of(UnauthenticatedException())
+      : (await service.verifyToken(tokenString)).fold(() => const Option.none(),
+          (t) {
+          // Not authenticated, remove token
+          forgetToken();
+          return Option.of(t);
+        });
 
   /// Erase the stored authentication token
   void forgetToken() {

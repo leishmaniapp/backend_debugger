@@ -54,36 +54,48 @@ class AuthRoute extends StatelessWidget {
                         ? AuthCredentialsView(
                             // Remove the auth service
                             onCancelConnection: () => (provider.service = null),
-                            onAuthenticate: (email, password) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => FutureLoadingDialog(
-                                  future:
-                                      provider.authenticate(email, password),
-                                  title: "Authenticating",
-                                  builder: (context, value) =>
-                                      value.data!.match(
-                                          () => const SimpleIgnoreDialog(
-                                                Text(
-                                                  "Successfully authenticated",
-                                                ),
-                                                Text(
-                                                  "Authentication token was successfully retrieved",
-                                                ),
-                                              ),
-                                          (e) => ExceptionAlertDialog(e)),
-                                ),
-                              );
-                            },
+                            onAuthenticate: (email, password) => showDialog(
+                              context: context,
+                              builder: (context) => FutureLoadingDialog(
+                                future: provider.authenticate(email, password),
+                                title: "Authenticating",
+                                builder: (context, value) => value.data!.match(
+                                    () => const SimpleIgnoreDialog(
+                                          Text(
+                                            "Successfully authenticated",
+                                          ),
+                                          Text(
+                                            "Authentication token was successfully retrieved",
+                                          ),
+                                        ),
+                                    (e) => ExceptionAlertDialog(e)),
+                              ),
+                            ),
                           )
                         : // Show the token contents
                         AuthTokenView(
                             token: provider.tokenString,
                             payload: provider.tokenPayload,
                             onCancelAuth: provider.forgetToken,
+                            onVerifyToken: () => showDialog(
+                              context: context,
+                              builder: (context) => FutureLoadingDialog(
+                                future: provider.verifyToken(),
+                                title: "Verifying token",
+                                builder: (context, value) => value.data!.match(
+                                    () => const SimpleIgnoreDialog(
+                                          Text(
+                                            "Valid Token",
+                                          ),
+                                          Text(
+                                            "Authentication token was successfully validated",
+                                          ),
+                                        ),
+                                    (e) => ExceptionAlertDialog(e)),
+                              ),
+                            ),
                             onContinue:
                                 context.read<RouteProvider>().goNextRoute,
-                            onVerifyToken: () {},
                           ),
           )),
     );
