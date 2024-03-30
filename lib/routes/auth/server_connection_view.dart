@@ -17,6 +17,10 @@ class AuthServerConnectionView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        const Icon(
+          Icons.power_rounded,
+          size: 64.0,
+        ),
         Text(
           "Connect to the authentication server",
           style: context.textStyles.bodyLarge,

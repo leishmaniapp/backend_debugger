@@ -21,6 +21,10 @@ class AuthCredentialsView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        const Icon(
+          Icons.people_alt_rounded,
+          size: 64.0,
+        ),
         Text(
           "Enter authentication credentials",
           style: context.textStyles.bodyLarge,
@@ -46,7 +50,7 @@ class AuthCredentialsView extends StatelessWidget {
           children: [
             OutlinedButton.icon(
                 onPressed: onCancelConnection,
-                icon: const Icon(Icons.block_rounded),
+                icon: const Icon(Icons.power_off_rounded),
                 label: const Text("Cancel connection")),
             FilledButton.icon(
                 onPressed: () => onAuthenticate(

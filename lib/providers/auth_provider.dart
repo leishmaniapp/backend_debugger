@@ -1,7 +1,12 @@
+import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/infrastructure/support.dart';
+import 'package:backend_debugger/proto/auth.pb.dart';
 import 'package:backend_debugger/providers/provider_with_service.dart';
 import 'package:backend_debugger/services/auth_service.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 
 class AuthProvider extends ProviderWithService<IAuthService> {
   AuthProvider({IAuthService? service}) : super(service);
@@ -16,9 +21,37 @@ class AuthProvider extends ProviderWithService<IAuthService> {
         return const Option.none();
       });
 
-  bool get authenticated => service.authenticated;
+  /// Check if user is authenticated
+  bool get authenticated => (_authToken != null);
 
-  void authenticate(String email, String password) async {
-    service.authenticated;
+  TokenString? _authToken;
+
+  /// Get the authencation token, null check exception when not authenticated
+  TokenString get tokenString => _authToken!;
+
+  /// Get the parsed authentication token, null check exception when not authenticated
+  JWT get jwtToken => JWT.decode(tokenString);
+
+  /// Get the JWT token payload contents
+  Either<Exception, TokenPayload> get tokenPayload => Either.tryCatch(
+      () => TokenPayload.create()..mergeFromProto3Json(jwtToken.payload),
+      (o, s) => o as Exception);
+
+  /// Authenticate in remote server
+  Future<Option<NetworkException>> authenticate(
+          String email, String password) async =>
+      (await service.authenticate(email, password)).match((l) => Option.of(l),
+          (token) {
+        // Store the token
+        _authToken = token;
+        notifyListeners();
+        GetIt.I.get<Logger>().i("Authenticated with token ($token)");
+        return const Option.none();
+      });
+
+  /// Erase the stored authentication token
+  void forgetToken() {
+    _authToken = null;
+    notifyListeners();
   }
 }

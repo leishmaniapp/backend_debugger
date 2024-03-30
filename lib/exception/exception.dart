@@ -5,6 +5,7 @@ part 'cause.dart';
 
 part 'network/network_exception.dart';
 part 'network/invalid_scheme_exception.dart';
+part 'network/remote_service_exception.dart';
 
 part 'network/server/remote_server_exception.dart';
 part 'network/server/bad_request_exception.dart';

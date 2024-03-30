@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:backend_debugger/exception/exception.dart';
 import 'package:fpdart/fpdart.dart';
 
-abstract interface class IAuthService {
-  /// Check if an user is authenticated
-  bool get authenticated;
+typedef TokenString = String;
 
+abstract interface class IAuthService {
   /// Authenticate user in the remote server, returns either an exception or a token
-  FutureOr<Either<RemoteServerException, String>> authenticate(
+  FutureOr<Either<NetworkException, TokenString>> authenticate(
       String email, String password);
 }
