@@ -1,9 +1,12 @@
+import 'package:backend_debugger/providers/sample_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:backend_debugger/layout.dart';
 import 'package:backend_debugger/providers/auth_provider.dart';
 import 'package:backend_debugger/providers/route_provider.dart';
+
+const kLeishmaniappColor = Color(0xff89458d);
 
 /// Main application widget
 class Application extends StatelessWidget {
@@ -14,9 +17,26 @@ class Application extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (context) => RouteProvider()),
           ChangeNotifierProvider(create: (context) => AuthProvider()),
+          ChangeNotifierProvider(create: (context) => SampleProvider()),
         ],
-        builder: (context, child) => const MaterialApp(
-          home: Layout(),
+        builder: (context, child) => MaterialApp(
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: kLeishmaniappColor,
+              brightness: Brightness.light,
+            ),
+            brightness: Brightness.light,
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: kLeishmaniappColor,
+              brightness: Brightness.dark,
+            ),
+            brightness: Brightness.dark,
+          ),
+          home: const Layout(),
         ),
       );
 }

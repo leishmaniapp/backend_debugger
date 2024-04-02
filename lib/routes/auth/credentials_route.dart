@@ -2,11 +2,11 @@ import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:flutter/material.dart';
 
 /// Ask for authentication credentials
-class AuthCredentialsView extends StatelessWidget {
+class AuthCredentialsRoute extends StatelessWidget {
   final Function() onCancelConnection;
   final Function(String email, String password) onAuthenticate;
 
-  const AuthCredentialsView({
+  const AuthCredentialsRoute({
     required this.onCancelConnection,
     required this.onAuthenticate,
     super.key,

@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
 abstract class ProviderWithService<S> with ChangeNotifier {
-  ProviderWithService(this._service);
+  ProviderWithService([this._service]);
 
   /// Check if the provided service is enabled (is not null)
   bool get hasService => _service != null;

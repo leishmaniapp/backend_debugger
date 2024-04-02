@@ -1,7 +1,7 @@
 import 'package:backend_debugger/providers/route_provider.dart';
-import 'package:backend_debugger/routes/about_route.dart';
 import 'package:backend_debugger/routes/auth/auth_route.dart';
 import 'package:backend_debugger/routes/home_route.dart';
+import 'package:backend_debugger/routes/samples/samples_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screwdriver/screwdriver.dart';
@@ -36,10 +36,10 @@ class _LayoutState extends State<Layout> {
         ),
         // About route
         const DestinationWithRoute(
-          AboutRoute(),
+          SamplesRoute(),
           NavigationDestination(
-            icon: Icon(Icons.help),
-            label: "About",
+            icon: Icon(Icons.image),
+            label: "Samples",
           ),
         ),
       ];

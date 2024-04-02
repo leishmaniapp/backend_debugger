@@ -7,4 +7,5 @@ targets:
     builders:
       protoc_builder:
         options:
+          grpc: true
           out_dir: "lib/proto"

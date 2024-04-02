@@ -4,14 +4,14 @@ import 'package:backend_debugger/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 
-class AuthTokenView extends StatelessWidget {
+class AuthTokenRoute extends StatelessWidget {
   final TokenString token;
   final Either<Exception, TokenPayload> payload;
   final Function() onCancelAuth;
   final Function() onContinue;
   final Function() onVerifyToken;
 
-  const AuthTokenView({
+  const AuthTokenRoute({
     required this.token,
     required this.payload,
     required this.onCancelAuth,
@@ -44,7 +44,7 @@ class AuthTokenView extends StatelessWidget {
                     color: context.colors.scheme.primary,
                   ),
                 ),
-                child: Text(token),
+                child: SelectableText(token),
               ),
               const Text("Token Information"),
               Container(
@@ -60,7 +60,7 @@ class AuthTokenView extends StatelessWidget {
                         : context.colors.scheme.primary,
                   ),
                 ),
-                child: Text(
+                child: SelectableText(
                   payload.match(
                       (l) => l.toString(), (r) => r.toProto3Json().toString()),
                 ),

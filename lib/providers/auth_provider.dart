@@ -10,7 +10,7 @@ import 'package:logger/logger.dart';
 import 'package:screwdriver/screwdriver.dart';
 
 class AuthProvider extends ProviderWithService<IAuthService> {
-  AuthProvider({IAuthService? service}) : super(service);
+  AuthProvider([super._service]);
 
   @override
   Option<Exception> requestServiceFromInfrastructureWithUri(Uri server) =>

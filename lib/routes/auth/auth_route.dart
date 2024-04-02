@@ -3,9 +3,9 @@ import 'package:backend_debugger/dialogs/future_loading_dialog.dart';
 import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
 import 'package:backend_debugger/providers/auth_provider.dart';
 import 'package:backend_debugger/providers/route_provider.dart';
-import 'package:backend_debugger/routes/auth/credentials_view.dart';
-import 'package:backend_debugger/routes/auth/server_connection_view.dart';
-import 'package:backend_debugger/routes/auth/token_view.dart';
+import 'package:backend_debugger/routes/auth/credentials_route.dart';
+import 'package:backend_debugger/routes/auth/server_connection_route.dart';
+import 'package:backend_debugger/routes/auth/token_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -31,7 +31,7 @@ class AuthRoute extends StatelessWidget {
                 // Check if service is available
                 (!provider.hasService)
                     // If no service has been provided, open the connection view
-                    ? AuthServerConnectionView((server) {
+                    ? AuthServerConnectionRoute((server) {
                         try {
                           // Request the service from the URI
                           provider
@@ -51,7 +51,7 @@ class AuthRoute extends StatelessWidget {
                     :
                     // If not authenticated, show credentials screen
                     (!provider.authenticated)
-                        ? AuthCredentialsView(
+                        ? AuthCredentialsRoute(
                             // Remove the auth service
                             onCancelConnection: () => (provider.service = null),
                             onAuthenticate: (email, password) => showDialog(
@@ -73,7 +73,7 @@ class AuthRoute extends StatelessWidget {
                             ),
                           )
                         : // Show the token contents
-                        AuthTokenView(
+                        AuthTokenRoute(
                             token: provider.tokenString,
                             payload: provider.tokenPayload,
                             onCancelAuth: provider.forgetToken,

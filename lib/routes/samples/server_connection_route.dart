@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
-class AuthServerConnectionView extends StatelessWidget {
+class SampleServerConnectionRoute extends StatelessWidget {
   /// When the server URI is provided
   final Function(Uri server) onServerProvided;
-  const AuthServerConnectionView(this.onServerProvided, {super.key});
+  const SampleServerConnectionRoute(this.onServerProvided, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,17 @@ class AuthServerConnectionView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Icon(
-          Icons.power_rounded,
+          Icons.image,
           size: 64.0,
         ),
         Text(
-          "Connect to the authentication server",
+          "Connect to the sample server",
           style: context.textStyles.bodyLarge,
+        ),
+        Text(
+          "This server is intended to be PRIVATE and authentication handled by GATEWAY",
+          style: context.textStyles.bodySmall,
+          textAlign: TextAlign.center,
         ),
         TextField(
           controller: textController,
