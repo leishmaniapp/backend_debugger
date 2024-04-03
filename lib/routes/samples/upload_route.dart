@@ -143,8 +143,8 @@ class UploadRoute extends StatelessWidget {
                 children: [
                   OutlinedButton.icon(
                       onPressed: onCancelConnection,
-                      icon: const Icon(Icons.power_off_rounded),
-                      label: const Text("Cancel connection")),
+                      icon: const Icon(Icons.home_repair_service_rounded),
+                      label: const Text("Back to services")),
                   FilledButton.icon(
                       onPressed: () {
                         try {
