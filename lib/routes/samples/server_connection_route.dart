@@ -26,7 +26,7 @@ class SampleServerConnectionRoute extends StatelessWidget {
           style: context.textStyles.bodyLarge,
         ),
         Text(
-          "This server is intended to be PRIVATE and authentication handled by GATEWAY",
+          "This server is intended to be PRIVATE, not accesible by the user and thus does not handle authentication",
           style: context.textStyles.bodySmall,
           textAlign: TextAlign.center,
         ),

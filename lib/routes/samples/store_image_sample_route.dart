@@ -5,13 +5,23 @@ import 'package:backend_debugger/tools/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-class UploadRoute extends StatelessWidget {
+class StoreImageSampleRoute extends StatelessWidget {
   final Function() onCancelConnection;
 
-  final Function(String asset, String uuid, int sample, String disease,
-      AnalysisStage stage, String results) onUploadSample;
+  final void Function(
+    String asset,
+    String uuid,
+    int sample,
+    String disease,
+    AnalysisStage stage,
+    String results,
+  ) onStoreImageSample;
 
-  const UploadRoute(this.onCancelConnection, this.onUploadSample, {super.key});
+  const StoreImageSampleRoute(
+    this.onCancelConnection,
+    this.onStoreImageSample, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +167,7 @@ class UploadRoute extends StatelessWidget {
                               fromString: textUuidController.value.text)) {
                             throw Exception("Invalid UUID");
                           }
-                          onUploadSample.call(
+                          onStoreImageSample.call(
                               selectedAsset!,
                               textUuidController.value.text,
                               int.parse(sampleTextController.value.text),

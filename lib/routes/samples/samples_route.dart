@@ -4,7 +4,8 @@ import 'package:backend_debugger/dialogs/future_loading_dialog.dart';
 import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
 import 'package:backend_debugger/providers/sample_provider.dart';
 import 'package:backend_debugger/routes/samples/server_connection_route.dart';
-import 'package:backend_debugger/routes/samples/upload_route.dart';
+import 'package:backend_debugger/routes/samples/store_image_sample_route.dart';
+import 'package:backend_debugger/routes/samples/update_sample_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -75,7 +76,7 @@ class _SamplesRouteState extends State<SamplesRoute> {
 
     // Keep all of the possible routes (each for each service)
     final routes = <_SampleRouteDestination>[
-      // Upload sampple
+      // Store sampple
       _SampleRouteDestination(
           key: UniqueKey(),
           icon: Icons.cloud_upload_rounded,
@@ -83,7 +84,7 @@ class _SamplesRouteState extends State<SamplesRoute> {
           subtitle: "Upload both sample image and metadata",
           onClick: (route) => setState(() => (currentDestination = route)),
           // Here goes the actual route
-          route: UploadRoute(
+          route: StoreImageSampleRoute(
             () => setState(() => (currentDestination = null)),
             (asset, uuid, sample, disease, stage, results) => showDialog(
               context: context,
@@ -96,6 +97,34 @@ class _SamplesRouteState extends State<SamplesRoute> {
                     const Text("Successfully uploaded sample"),
                     Text(
                       "Sample ($sample) for diagnosis ($uuid) successfully uploaded",
+                    ),
+                  ),
+                  (e) => ExceptionAlertDialog(e),
+                ),
+              ),
+            ),
+          )),
+      // Update sampple
+      _SampleRouteDestination(
+          key: UniqueKey(),
+          icon: Icons.sync_outlined,
+          title: "UpdateSample",
+          subtitle: "Update metadata on an already existing sample",
+          onClick: (route) => setState(() => (currentDestination = route)),
+          // Here goes the actual route
+          route: UpdateSampleRoute(
+            () => setState(() => (currentDestination = null)),
+            (uuid, sample, disease, stage, results, date) => showDialog(
+              context: context,
+              builder: (context) => FutureLoadingDialog(
+                // Call the sample storage service
+                future: provider.updateSample(
+                    uuid, sample, disease, stage, results, date),
+                builder: (context, value) => value.data!.match(
+                  () => SimpleIgnoreDialog(
+                    const Text("Successfully updated sample"),
+                    Text(
+                      "Sample ($sample) for diagnosis ($uuid) successfully updated",
                     ),
                   ),
                   (e) => ExceptionAlertDialog(e),
