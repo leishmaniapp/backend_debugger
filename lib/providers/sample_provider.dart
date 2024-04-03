@@ -59,12 +59,12 @@ class SampleProvider extends ProviderWithService<ISampleService> {
           date: date));
 
   /// Get a sample
-  Future<Either<CustomException, SampleContents>> getSample(
+  Future<Either<CustomException, Object>> getSample(
           String uuid, int sample) async =>
       service.getSample(uuid, sample);
 
   /// Delete a sample
-  Future<Either<CustomException, SampleContents>> deleteSample(
+  Future<Either<CustomException, Object>> deleteSample(
           String uuid, int sample) async =>
       service.deleteSample(uuid, sample);
 }

@@ -2,7 +2,9 @@ import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:backend_debugger/dialogs/exception_alert_dialog.dart';
 import 'package:backend_debugger/dialogs/future_loading_dialog.dart';
 import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
+import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/providers/sample_provider.dart';
+import 'package:backend_debugger/routes/samples/get_or_delete_sample_route.dart';
 import 'package:backend_debugger/routes/samples/server_connection_route.dart';
 import 'package:backend_debugger/routes/samples/store_image_sample_route.dart';
 import 'package:backend_debugger/routes/samples/update_sample_route.dart';
@@ -10,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:screwdriver/screwdriver.dart';
 
 /// SampleService has many possible routes (each for each provided method)
 /// wrap each one of these routes in a selectable Card for nativation
@@ -130,6 +133,73 @@ class _SamplesRouteState extends State<SamplesRoute> {
                   (e) => ExceptionAlertDialog(e),
                 ),
               ),
+            ),
+          )),
+      _SampleRouteDestination(
+          key: UniqueKey(),
+          icon: Icons.download,
+          title: "GetSample",
+          subtitle: "Get a sample metadata from the server",
+          onClick: (route) => setState(() => (currentDestination = route)),
+          // Here goes the actual route
+          route: GetOrDeleteSampleRoute(
+            () => setState(() => (currentDestination = null)),
+            // Get the sample and return the result
+            (uuid, sample) => provider.getSample(uuid, sample).apply((future) {
+              // Show the dialog
+              showDialog(
+                context: context,
+                builder: (context) => FutureLoadingDialog(
+                  // Call the sample storage service
+                  future: future,
+                  builder: (context, value) => value.data!.match(
+                    (CustomException left) => ExceptionAlertDialog(left),
+                    (Object right) => SimpleIgnoreDialog(
+                      const Text("Successfully downloaded sample"),
+                      Text(
+                        "Sample ($sample) for diagnosis ($uuid) successfully downloaded",
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).then(
+              // Return the value or null
+              (value) => value.getRight().toNullable(),
+            ),
+          )),
+      _SampleRouteDestination(
+          key: UniqueKey(),
+          icon: Icons.delete,
+          title: "DeleteSample",
+          subtitle: "Delete a sample metadata from the server",
+          onClick: (route) => setState(() => (currentDestination = route)),
+          // Here goes the actual route
+          route: GetOrDeleteSampleRoute(
+            () => setState(() => (currentDestination = null)),
+            // Get the sample and return the result
+            (uuid, sample) =>
+                provider.deleteSample(uuid, sample).apply((future) {
+              // Show the dialog
+              showDialog(
+                context: context,
+                builder: (context) => FutureLoadingDialog(
+                  // Call the sample storage service
+                  future: future,
+                  builder: (context, value) => value.data!.match(
+                    (CustomException left) => ExceptionAlertDialog(left),
+                    (Object right) => SimpleIgnoreDialog(
+                      const Text("Successfully downloaded sample"),
+                      Text(
+                        "Sample ($sample) for diagnosis ($uuid) successfully downloaded",
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).then(
+              // Return the value or null
+              (value) => value.getRight().toNullable(),
             ),
           )),
     ];
