@@ -5,7 +5,6 @@ import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
 import 'package:backend_debugger/providers/sample_provider.dart';
 import 'package:backend_debugger/routes/samples/server_connection_route.dart';
 import 'package:backend_debugger/routes/samples/upload_route.dart';
-import 'package:backend_debugger/tools/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -80,7 +79,7 @@ class _SamplesRouteState extends State<SamplesRoute> {
       _SampleRouteDestination(
           key: UniqueKey(),
           icon: Icons.cloud_upload_rounded,
-          title: "UploadImageSample",
+          title: "StoreImageSample",
           subtitle: "Upload both sample image and metadata",
           onClick: (route) => setState(() => (currentDestination = route)),
           // Here goes the actual route
@@ -89,19 +88,9 @@ class _SamplesRouteState extends State<SamplesRoute> {
             (asset, uuid, sample, disease, stage, results) => showDialog(
               context: context,
               builder: (context) => FutureLoadingDialog(
-                future: () async {
-                  return provider.uploadImageSample(
-                    uuid,
-                    sample,
-                    disease,
-                    stage,
-                    results,
-                    DateTime.now(),
-                    (await AssetsTool().loadBytes(asset)).asByteData(),
-                    500,
-                    "image/jpeg",
-                  );
-                }(),
+                // Call the sample storage service
+                future: provider.storeImageSample(
+                    asset, uuid, sample, disease, stage, results),
                 builder: (context, value) => value.data!.match(
                   () => SimpleIgnoreDialog(
                     const Text("Successfully uploaded sample"),

@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/infrastructure/support.dart';
 import 'package:backend_debugger/proto/model.pbenum.dart';
 import 'package:backend_debugger/providers/provider_with_service.dart';
 import 'package:backend_debugger/services/sample_service.dart';
+import 'package:backend_debugger/tools/assets.dart';
 import 'package:fpdart/fpdart.dart';
 
 class SampleProvider extends ProviderWithService<ISampleService> {
@@ -21,18 +21,50 @@ class SampleProvider extends ProviderWithService<ISampleService> {
         return const Option.none();
       });
 
-  FutureOr<Option<CustomException>> uploadImageSample(
-    String diagnosisUuid,
-    int sample,
-    String disease,
-    AnalysisStage stage,
-    String results,
-    DateTime date,
-    ByteData sampleBytes,
-    int sampleSize,
-    String sampleMime,
-  ) {
-    return service.uploadImageSample(diagnosisUuid, sample, disease, stage,
-        results, date, sampleBytes, sampleSize, sampleMime);
-  }
+  /// Store an image and its sample metadata
+  Future<Option<CustomException>> storeImageSample(
+          String asset,
+          String uuid,
+          int sample,
+          String disease,
+          AnalysisStage stage,
+          String results) async =>
+      service.storeImageSample(
+          ImageContents(
+              bytes: (await AssetsTool().loadBytes(asset)).asByteData(),
+              mime: "image/jpeg",
+              size: 500),
+          SampleContents(
+              uuid: uuid,
+              sample: sample,
+              disease: disease,
+              stage: stage,
+              results: results,
+              date: DateTime.now()));
+
+  /// Update already existing sample metadata
+  Future<Option<CustomException>> updateSample(
+          String uuid,
+          int sample,
+          String disease,
+          AnalysisStage stage,
+          String results,
+          DateTime date) async =>
+      service.updateSample(SampleContents(
+          uuid: uuid,
+          sample: sample,
+          disease: disease,
+          stage: stage,
+          results: results,
+          date: date));
+
+  /// Get a sample
+  Future<Either<CustomException, SampleContents>> getSample(
+          String uuid, int sample) async =>
+      service.getSample(uuid, sample);
+
+  /// Delete a sample
+  Future<Either<CustomException, SampleContents>> deleteSample(
+          String uuid, int sample) async =>
+      service.deleteSample(uuid, sample);
 }

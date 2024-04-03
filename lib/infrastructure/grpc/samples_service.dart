@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'dart:typed_data';
-
 import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/infrastructure/grpc/grpc_service.dart';
 import 'package:backend_debugger/proto/model.pb.dart';
@@ -22,26 +20,19 @@ class GrpcSampleService extends GrpcService<SampleServiceClient>
   GrpcSampleService(Duration timeout, ClientChannel channel)
       : super(timeout, channel, SampleServiceClient(channel));
 
+  /// Store an image and its sample metadata
   @override
-  FutureOr<Option<CustomException>> uploadImageSample(
-      String diagnosisUuid,
-      int sample,
-      String disease,
-      AnalysisStage stage,
-      String results,
-      DateTime date,
-      ByteData sampleBytes,
-      int sampleSize,
-      String sampleMime) async {
+  Future<Option<CustomException>> storeImageSample(
+      ImageContents image, SampleContents sample) async {
     // Serialize the results
     try {
       // Create the sample request
       final request = ImageSampleRequest(
         sample: Sample(
           // Parse result JSON into the appropiate type
-          results: results.isEmpty
+          results: sample.results.isEmpty
               ? <String, ListOfCoordinates>{}
-              : (jsonDecode(results) as Map<String, dynamic>).mapValue(
+              : (jsonDecode(sample.results) as Map<String, dynamic>).mapValue(
                   (value) => ListOfCoordinates(
                     coordinates: (value as List<dynamic>).map<Coordinates>(
                       (e) => Coordinates.create()..mergeFromProto3Json(e),
@@ -50,17 +41,18 @@ class GrpcSampleService extends GrpcService<SampleServiceClient>
                 ),
           // Store image metadata
           metadata: ImageMetadata(
-              diagnosis: diagnosisUuid,
-              sample: sample,
-              disease: disease,
-              date: Int64(date.unixtime),
-              size: sampleSize),
-          stage: stage,
+            diagnosis: sample.disease,
+            sample: sample.sample,
+            disease: sample.disease,
+            date: Int64(sample.date.unixtime),
+            size: image.size,
+          ),
+          stage: sample.stage,
         ),
         // Image ByteBuffer as byte[]
         image: ImageBytes(
-          mime: sampleMime,
-          data: sampleBytes.buffer.asUint8List(),
+          mime: image.mime,
+          data: image.bytes.buffer.asUint8List(),
         ),
       );
 
@@ -102,5 +94,28 @@ class GrpcSampleService extends GrpcService<SampleServiceClient>
         return Option.of(UnknownException(e.toString()));
       }
     }
+  }
+
+  /// Update already existing sample metadata
+  @override
+  Future<Option<CustomException>> updateSample(SampleContents sample) {
+    throw UnimplementedError(
+        "gRPC service SampleService missing implementation");
+  }
+
+  /// Get a sample
+  @override
+  Future<Either<CustomException, SampleContents>> getSample(
+      String uuid, int sample) {
+    throw UnimplementedError(
+        "gRPC service SampleService missing implementation");
+  }
+
+  /// Delete a sample
+  @override
+  Future<Either<CustomException, SampleContents>> deleteSample(
+      String uuid, int sample) {
+    throw UnimplementedError(
+        "gRPC service SampleService missing implementation");
   }
 }
