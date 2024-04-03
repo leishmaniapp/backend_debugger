@@ -135,6 +135,7 @@ class _SamplesRouteState extends State<SamplesRoute> {
               ),
             ),
           )),
+      // Get a sample
       _SampleRouteDestination(
           key: UniqueKey(),
           icon: Icons.download,
@@ -154,7 +155,7 @@ class _SamplesRouteState extends State<SamplesRoute> {
                   future: future,
                   builder: (context, value) => value.data!.match(
                     (CustomException left) => ExceptionAlertDialog(left),
-                    (Object right) => SimpleIgnoreDialog(
+                    (right) => SimpleIgnoreDialog(
                       const Text("Successfully downloaded sample"),
                       Text(
                         "Sample ($sample) for diagnosis ($uuid) successfully downloaded",
@@ -168,6 +169,7 @@ class _SamplesRouteState extends State<SamplesRoute> {
               (value) => value.getRight().toNullable(),
             ),
           )),
+      // Delete the sample
       _SampleRouteDestination(
           key: UniqueKey(),
           icon: Icons.delete,
@@ -188,10 +190,10 @@ class _SamplesRouteState extends State<SamplesRoute> {
                   future: future,
                   builder: (context, value) => value.data!.match(
                     (CustomException left) => ExceptionAlertDialog(left),
-                    (Object right) => SimpleIgnoreDialog(
-                      const Text("Successfully downloaded sample"),
+                    (right) => SimpleIgnoreDialog(
+                      const Text("Successfully deleted sample"),
                       Text(
-                        "Sample ($sample) for diagnosis ($uuid) successfully downloaded",
+                        "Sample ($sample) for diagnosis ($uuid) successfully DELETED",
                       ),
                     ),
                   ),

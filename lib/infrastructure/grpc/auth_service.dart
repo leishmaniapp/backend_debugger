@@ -20,46 +20,43 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
 
   @override
   Future<Either<CustomException, TokenString>> authenticate(
-          String email, String password) async =>
+          String email, String password) =>
       // Order of operation is the following
       // TaskEither<Exception, AuthResponse> -> Either<Exception, Either<Exception, String>> -> Either<Exception, String>
-      (await TaskEither.tryCatch(
-                  // Call to authentication with timeout Future into TetworkExceptionask
-                  () => stub
-                      .authenticate(
-                          AuthRequest(email: email, password: password))
-                      .timeout(timeout),
-                  // Transform error into a NetworkException
-                  (o, s) => RemoteServiceException(
-                        // Catch the GrpcError and get its message as a RemoteServiceException
-                        (o as GrpcError).message.toString(),
-                      ) as NetworkException)
-              // Unwrap the Task into a Future
-              .run())
+      TaskEither.tryCatch(
+              // Call to authentication with timeout Future into TetworkExceptionask
+              () => stub
+                  .authenticate(AuthRequest(email: email, password: password))
+                  .timeout(timeout),
+              // Transform error into a NetworkException
+              (o, s) => RemoteServiceException(
+                    // Catch the GrpcError and get its message as a RemoteServiceException
+                    (o as GrpcError).message.toString(),
+                  ) as NetworkException)
           // Transform the result into an Either<Error, Value> instead of AuthResponse
-          .bind((r) => r.status
+          .chainEither((r) => r.status
               // Get the exception if present (transform to Option<Exception>)
               .toException()
               // Get either the error or the token
               .toEither(() => r.token)
               // Swap positions to put the error as Left
-              .swap());
+              .swap())
+          .run();
 
   @override
-  FutureOr<Option<CustomException>> verifyToken(TokenString token) async =>
+  FutureOr<Option<CustomException>> verifyToken(TokenString token) =>
       // Order of operations is the following
       // TaskEither<Exception, StatusCode> -> Either<Exception, Option<Exception>> -> Either<Exception, Unit> -> Option<Exception>
-      (await TaskEither.tryCatch(
-                  () => stub.verifyToken(VerificationRequest(token: token)),
-                  // Transform error into a NetworkException
-                  (o, s) => (RemoteServiceException(
-                        // Catch the GrpcError and get its message as a RemoteServiceException
-                        (o as GrpcError).message.toString(),
-                      ) as NetworkException))
-              // Unwrap task into a future
-              .run())
+      TaskEither.tryCatch(
+              () => stub.verifyToken(VerificationRequest(token: token)),
+              // Transform error into a NetworkException
+              (o, s) => (RemoteServiceException(
+                    // Catch the GrpcError and get its message as a RemoteServiceException
+                    (o as GrpcError).message.toString(),
+                  ) as NetworkException))
+
           // Transform the result into an Either<Error, Unit> instead of StatusCode
-          .bind((r) => r
+          .chainEither((r) => r
               // Get the exception if present (transform to Option<Exception>)
               .toException()
               // Create Either to match parent type
@@ -68,6 +65,8 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
               .swap())
           // Put error (left) as value
           .swap()
-          // Return the error if present
-          .toOption();
+          // Wrap into an option
+          .match<Option<CustomException>>(
+              (l) => const Option.none(), (r) => Option.of(r))
+          .run();
 }

@@ -31,12 +31,13 @@ dependencies:
   unixtime: ^1.0.0
   # Generate UUID
   uuid: ^4.3.3
-
   # shared schema definition
   protobuf: ^3.1.0
+  # Int64 and Int32 parsing
+  fixnum: ^1.1.0
   # communication protocol with the backend
   grpc: ^3.2.4
-  fixnum: ^1.1.0
+
 
 dev_dependencies:
   flutter_test:

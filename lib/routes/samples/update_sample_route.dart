@@ -147,7 +147,8 @@ class UpdateSampleRoute extends StatelessWidget {
                                   if (datetime != null) {
                                     // Replace current datetime with provided one
                                     setState(
-                                        () => (currentDateTime = datetime));
+                                      () => (currentDateTime = datetime),
+                                    );
                                   }
                                 }),
                                 child: const Text("Pick Date"),
@@ -214,7 +215,7 @@ class UpdateSampleRoute extends StatelessWidget {
                             diseaseTextController.value.text,
                             analysisStage!,
                             resultsTextController.value.text,
-                            DateTime.now(),
+                            currentDateTime,
                           );
                         } catch (e) {
                           showDialog(

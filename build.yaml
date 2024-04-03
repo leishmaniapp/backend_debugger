@@ -3,9 +3,14 @@ targets:
     sources:
       - $package$
       - lib/$lib$
+      - lib/services/**
       - proto/**
     builders:
+      # Create gRPC file definitions
       protoc_builder:
         options:
           grpc: true
           out_dir: "lib/proto"
+      # Create JSON serializable instances
+      json_serializable:
+        options:
