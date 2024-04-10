@@ -39,7 +39,7 @@ class AuthCredentialsRoute extends StatelessWidget {
         ),
         TextField(
           obscureText: true,
-          keyboardType: TextInputType.none,
+          keyboardType: TextInputType.text,
           controller: passwordTextController,
           decoration: const InputDecoration(
               border: OutlineInputBorder(), labelText: "Password"),

@@ -46,14 +46,17 @@ class _LayoutState extends State<Layout> {
     });
 
     return Scaffold(
-      body: PageView(
-        scrollDirection: Axis.horizontal,
-        controller: routeProvider.pageController,
-        onPageChanged: (newDestinationIndex) => routeProvider.goToRouteIndex(
-          newDestinationIndex,
-          animate: false,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: PageView(
+          scrollDirection: Axis.horizontal,
+          controller: routeProvider.pageController,
+          onPageChanged: (newDestinationIndex) => routeProvider.goToRouteIndex(
+            newDestinationIndex,
+            animate: false,
+          ),
+          children: routeProvider.destinations.map((e) => e.route).toList(),
         ),
-        children: routeProvider.destinations.map((e) => e.route).toList(),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: routeProvider.currentDestinationIndex,

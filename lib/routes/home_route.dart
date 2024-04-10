@@ -18,7 +18,7 @@ class HomeRoute extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   "Leishmaniapp",
-                  style: context.textStyles.displayLarge,
+                  style: context.textStyles.displayMedium,
                 ),
               ),
               Padding(
