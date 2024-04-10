@@ -44,11 +44,38 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
           .run();
 
   @override
-  FutureOr<Option<CustomException>> verifyToken(TokenString token) =>
+  Future<Option<CustomException>> verifyToken(TokenString token) =>
       // Order of operations is the following
       // TaskEither<Exception, StatusCode> -> Either<Exception, Option<Exception>> -> Either<Exception, Unit> -> Option<Exception>
       TaskEither.tryCatch(
-              () => stub.verifyToken(VerificationRequest(token: token)),
+              () => stub.verifyToken(TokenRequest(token: token)),
+              // Transform error into a NetworkException
+              (o, s) => (RemoteServiceException(
+                    // Catch the GrpcError and get its message as a RemoteServiceException
+                    (o as GrpcError).message.toString(),
+                  ) as NetworkException))
+
+          // Transform the result into an Either<Error, Unit> instead of StatusCode
+          .chainEither((r) => r
+              // Get the exception if present (transform to Option<Exception>)
+              .toException()
+              // Create Either to match parent type
+              .toEither(() => unit)
+              // Swap positions to put the error as Left
+              .swap())
+          // Put error (left) as value
+          .swap()
+          // Wrap into an option
+          .match<Option<CustomException>>(
+              (l) => const Option.none(), (r) => Option.of(r))
+          .run();
+
+  @override
+  Future<Option<CustomException>> invalidateSession(TokenString token) =>
+      // Order of operations is the following
+      // TaskEither<Exception, StatusCode> -> Either<Exception, Option<Exception>> -> Either<Exception, Unit> -> Option<Exception>
+      TaskEither.tryCatch(
+              () => stub.invalidateSession(TokenRequest(token: token)),
               // Transform error into a NetworkException
               (o, s) => (RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException

@@ -64,4 +64,9 @@ class AuthProvider extends ProviderWithService<IAuthService> {
     _authToken = null;
     notifyListeners();
   }
+
+  /// Invalidate the current token
+  Future<Option<CustomException>> invalidate() async => _authToken.isNull
+      ? Option.of(UnauthenticatedException())
+      : await service.invalidateSession(tokenString);
 }

@@ -10,6 +10,7 @@ class AuthTokenRoute extends StatelessWidget {
   final Function() onCancelAuth;
   final Function() onContinue;
   final Function() onVerifyToken;
+  final Function() onInvalidateToken;
 
   const AuthTokenRoute({
     required this.token,
@@ -17,6 +18,7 @@ class AuthTokenRoute extends StatelessWidget {
     required this.onCancelAuth,
     required this.onContinue,
     required this.onVerifyToken,
+    required this.onInvalidateToken,
     super.key,
   });
 
@@ -65,15 +67,21 @@ class AuthTokenRoute extends StatelessWidget {
                       (l) => l.toString(), (r) => r.toProto3Json().toString()),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 12.0,
+                runSpacing: 12.0,
                 children: [
                   OutlinedButton.icon(
                       onPressed: onCancelAuth,
                       icon: const Icon(
                           Icons.sentiment_very_dissatisfied_outlined),
                       label: const Text("Forget Token")),
+                  FilledButton.tonalIcon(
+                    onPressed: onInvalidateToken,
+                    icon: const Icon(Icons.disabled_by_default_rounded),
+                    label: const Text("Invalidate Session"),
+                  ),
                   FilledButton.tonalIcon(
                     onPressed: onVerifyToken,
                     icon: const Icon(Icons.verified_rounded),

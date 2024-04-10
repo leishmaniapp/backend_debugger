@@ -1,6 +1,7 @@
 import 'package:backend_debugger/dialogs/exception_alert_dialog.dart';
 import 'package:backend_debugger/dialogs/future_loading_dialog.dart';
 import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
+import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/providers/auth_provider.dart';
 import 'package:backend_debugger/providers/route_provider.dart';
 import 'package:backend_debugger/routes/auth/credentials_route.dart';
@@ -89,6 +90,32 @@ class AuthRoute extends StatelessWidget {
                                           ),
                                           Text(
                                             "Authentication token was successfully validated",
+                                          ),
+                                        ),
+                                    (e) => (e is UnauthenticatedException)
+                                        ? const SimpleIgnoreDialog(
+                                            Text(
+                                              "Token validation failed (Token not valid)",
+                                            ),
+                                            Text(
+                                              "Token validation failed, token was either altered or invalidated",
+                                            ),
+                                          )
+                                        : ExceptionAlertDialog(e)),
+                              ),
+                            ),
+                            onInvalidateToken: () => showDialog(
+                              context: context,
+                              builder: (context) => FutureLoadingDialog(
+                                future: provider.invalidate(),
+                                title: "Invalidating current session",
+                                builder: (context, value) => value.data!.match(
+                                    () => const SimpleIgnoreDialog(
+                                          Text(
+                                            "Token invalidation completed",
+                                          ),
+                                          Text(
+                                            "For security reasons, even if the token is not invalidated, an OK response will be sent. Please manually check if the token is still valid",
                                           ),
                                         ),
                                     (e) => ExceptionAlertDialog(e)),

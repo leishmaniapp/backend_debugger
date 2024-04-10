@@ -14,4 +14,9 @@ abstract interface class IAuthService {
   /// Returns a [NetworkException] on network failure or subtype [AuthException] if token is invalid
   /// Returns [Option.none] if token is valid
   FutureOr<Option<CustomException>> verifyToken(TokenString token);
+
+  /// Invalidate current token
+  /// Returns a [NetworkException] on network failure
+  /// Returns [Option.none] if token was invalidated
+  FutureOr<Option<CustomException>> invalidateSession(TokenString token);
 }
