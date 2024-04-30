@@ -11,11 +11,13 @@ extension StatusResponseToException on StatusResponse {
           Some(InternalServerException(description)),
         StatusCode.NOT_FOUND => Some(ResourceNotFoundException()),
         StatusCode.BAD_REQUEST => Some(BadRequestException(description)),
+        StatusCode.UNPROCESSABLE_CONTENT =>
+          Some(UnprocessableContentException(description)),
         // Auth errors
         StatusCode.INVALID_TOKEN => Some(InvalidTokenException(description)),
         StatusCode.FORBIDDEN => Some(InvalidCredentialsException()),
         StatusCode.UNAUTHENTICATED => Some(UnauthenticatedException()),
-        StatusCode.UNSPECIFIED => Some(
+        StatusCode.IM_A_TEAPOD || StatusCode.UNSPECIFIED => Some(
             UndefinedServerException(
                 "Unspecified by server ($code) -> ${description.isEmpty ? "no description provided" : description}"),
           ),

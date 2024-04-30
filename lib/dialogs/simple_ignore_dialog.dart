@@ -12,7 +12,9 @@ class SimpleIgnoreDialog extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            content,
+            SingleChildScrollView(
+              child: content,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FilledButton(

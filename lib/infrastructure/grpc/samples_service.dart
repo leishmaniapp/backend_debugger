@@ -11,10 +11,10 @@ import 'package:backend_debugger/tools/grpc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:grpc/grpc.dart';
 
-class GrpcSampleService extends GrpcService<SampleServiceClient>
+class GrpcSampleService extends GrpcService<SamplesServiceClient>
     implements ISampleService {
   GrpcSampleService(Duration timeout, ClientChannel channel)
-      : super(timeout, channel, SampleServiceClient(channel));
+      : super(timeout, channel, SamplesServiceClient(channel));
 
   /// Store an image and its sample metadata
   @override
@@ -115,6 +115,25 @@ class GrpcSampleService extends GrpcService<SampleServiceClient>
               .toException()
               .toEither(
                 () => r.sample,
+              )
+              .swap())
+          .run();
+
+  /// Get samples in DELIVER state
+  @override
+  Future<Either<CustomException, List<Sample>>> getUndeliveredSamples(
+          String email) =>
+      TaskEither.tryCatch(
+              () => stub.getUndeliveredBySpecialist(
+                  UndeliveredRequest(specialist: email)),
+              (o, s) => RemoteServiceException(
+                    // Catch the GrpcError and get its message as a RemoteServiceException
+                    (o as GrpcError).message.toString(),
+                  ) as NetworkException)
+          .chainEither((r) => r.status
+              .toException()
+              .toEither(
+                () => r.samples,
               )
               .swap())
           .run();

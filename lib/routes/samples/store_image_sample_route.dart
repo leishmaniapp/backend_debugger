@@ -1,21 +1,24 @@
+import 'dart:convert';
+
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
 import 'package:backend_debugger/proto/model.pb.dart';
+import 'package:backend_debugger/proto/types.pb.dart';
+import 'package:backend_debugger/providers/auth_provider.dart';
 import 'package:backend_debugger/tools/assets.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+import 'package:unixtime/unixtime.dart';
 import 'package:uuid/uuid.dart';
 
 class StoreImageSampleRoute extends StatelessWidget {
   final Function() onCancelConnection;
 
-  final void Function(
-    String asset,
-    String uuid,
-    int sample,
-    String disease,
-    AnalysisStage stage,
-    String results,
-  ) onStoreImageSample;
+  final void Function(String, Sample) onStoreImageSample;
 
   const StoreImageSampleRoute(
     this.onCancelConnection,
@@ -48,7 +51,7 @@ class StoreImageSampleRoute extends StatelessWidget {
                 Icons.image,
                 size: 64.0,
               ),
-              const Text("Enter sample storage metadata"),
+              const Text("Enter sample metadata"),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -158,6 +161,7 @@ class StoreImageSampleRoute extends StatelessWidget {
                   FilledButton.icon(
                       onPressed: () {
                         try {
+                          // Parse stage and UUID
                           if (analysisStage == null) {
                             throw Exception(
                                 "AnalysisStage has not been selected");
@@ -167,19 +171,57 @@ class StoreImageSampleRoute extends StatelessWidget {
                               fromString: textUuidController.value.text)) {
                             throw Exception("Invalid UUID");
                           }
+
+                          // Get the specialist
+                          final specialist =
+                              switch (context.read<AuthProvider>().specialist) {
+                            Left(value: final l) => throw l,
+                            Right(value: final r) => r,
+                          };
+
+                          // Get the results json
+                          final results = resultsTextController.value.text;
+
+                          // Store the image sample
                           onStoreImageSample.call(
-                              selectedAsset!,
-                              textUuidController.value.text,
-                              int.parse(sampleTextController.value.text),
-                              diseaseTextController.value.text,
-                              analysisStage!,
-                              resultsTextController.value.text);
-                        } catch (e) {
+                            selectedAsset!,
+                            Sample(
+                                specialist: Specialist_Record(
+                                  email: specialist.email,
+                                  name: specialist.name,
+                                ),
+                                metadata: ImageMetadata(
+                                  diagnosis: textUuidController.value.text,
+                                  sample: int.parse(
+                                      sampleTextController.value.text),
+                                  disease: diseaseTextController.value.text,
+                                  date: Int64(DateTime.now().unixtime),
+                                ),
+                                stage: analysisStage!,
+                                results: results.isEmpty
+                                    ? <String, ListOfCoordinates>{}
+                                    : (jsonDecode(results)
+                                            as Map<String, dynamic>)
+                                        .mapValue(
+                                        (value) => ListOfCoordinates(
+                                          coordinates: (value["coordintes"]
+                                                  as List<dynamic>)
+                                              .map<Coordinates>(
+                                            (e) => Coordinates.create()
+                                              ..mergeFromProto3Json(e),
+                                          ),
+                                        ),
+                                      )),
+                          );
+                        } catch (e, s) {
+                          GetIt.I.get<Logger>().e("Failed to upload sample",
+                              error: e, stackTrace: s);
+
                           showDialog(
                             context: context,
                             builder: (context) => SimpleIgnoreDialog(
                                 const Text("Error parsing options"),
-                                Text(e.toString())),
+                                Text("$e")),
                           );
                         }
                       },

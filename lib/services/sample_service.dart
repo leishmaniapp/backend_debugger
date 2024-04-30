@@ -22,4 +22,8 @@ abstract interface class ISampleService {
   /// Delete a sample
   FutureOr<Either<CustomException, Sample>> deleteSample(
       String uuid, int sample);
+
+  /// Get undelivered samples (DELIVER or ERROR_DELIVER stage)
+  FutureOr<Either<CustomException, List<Sample>>> getUndeliveredSamples(
+      String email);
 }

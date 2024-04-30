@@ -1,32 +1,31 @@
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
 import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
+import 'package:backend_debugger/proto/model.pb.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
-class GetOrDeleteSampleRoute extends StatefulWidget {
+class GetUndeliveredRoute extends StatefulWidget {
   final Function() onCancelConnection;
 
-  final Future<Object?>? Function(String uuid, int sample) onGetSample;
+  final Future<List<Sample>?>? Function(String email) onGetSample;
 
-  const GetOrDeleteSampleRoute(
+  const GetUndeliveredRoute(
     this.onCancelConnection,
     this.onGetSample, {
     super.key,
   });
 
   @override
-  State<GetOrDeleteSampleRoute> createState() => _GetOrDeleteSampleRouteState();
+  State<GetUndeliveredRoute> createState() => _GetUndeliveredRouteState();
 }
 
-class _GetOrDeleteSampleRouteState extends State<GetOrDeleteSampleRoute> {
+class _GetUndeliveredRouteState extends State<GetUndeliveredRoute> {
   // Stored result
   Future<Object?>? result;
 
   @override
   Widget build(BuildContext context) {
     // Get UUID controller
-    final textUuidController = TextEditingController();
-    final sampleTextController = TextEditingController()..text = "0";
+    final textEmailController = TextEditingController();
 
     return SingleChildScrollView(
       child: Padding(
@@ -42,21 +41,14 @@ class _GetOrDeleteSampleRouteState extends State<GetOrDeleteSampleRoute> {
                 Icons.image,
                 size: 64.0,
               ),
-              const Text("Enter sample metadata"),
+              const Text("Enter specialist email"),
               TextField(
-                controller: textUuidController,
+                controller: textEmailController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Diagnosis UUID",
+                  labelText: "Specialist email",
                 ),
               ),
-              TextField(
-                  controller: sampleTextController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Sample Number",
-                  )),
               Card(
                   child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -83,16 +75,10 @@ class _GetOrDeleteSampleRouteState extends State<GetOrDeleteSampleRoute> {
                   FilledButton.icon(
                       onPressed: () {
                         try {
-                          if (!Uuid.isValidUUID(
-                              fromString: textUuidController.value.text)) {
-                            throw Exception("Invalid UUID");
-                          }
-
                           // Call getSample and store the result
                           setState(() {
                             result = widget.onGetSample.call(
-                              textUuidController.value.text,
-                              int.parse(sampleTextController.value.text),
+                              textEmailController.value.text,
                             );
                           });
                         } catch (e) {

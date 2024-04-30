@@ -1,6 +1,7 @@
 import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/infrastructure/support.dart';
 import 'package:backend_debugger/proto/auth.pb.dart';
+import 'package:backend_debugger/proto/model.pb.dart';
 import 'package:backend_debugger/providers/provider_with_service.dart';
 import 'package:backend_debugger/services/auth_service.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
@@ -36,7 +37,11 @@ class AuthProvider extends ProviderWithService<IAuthService> {
   /// Get the JWT token payload contents
   Either<Exception, TokenPayload> get tokenPayload => Either.tryCatch(
       () => TokenPayload.create()..mergeFromProto3Json(jwtToken.payload),
-      (o, s) => o as Exception);
+      (_, __) => UnauthenticatedException());
+
+  /// Get a specialist contained within a [TokenPayload]
+  Either<Exception, Specialist> get specialist =>
+      tokenPayload.map((a) => a.specialist);
 
   /// Authenticate in remote server
   Future<Option<CustomException>> authenticate(
