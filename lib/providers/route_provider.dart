@@ -5,7 +5,10 @@ class DestinationWithRoute {
   final Widget route;
   final NavigationDestination destination;
 
-  const DestinationWithRoute(this.route, this.destination);
+  const DestinationWithRoute(
+    this.route,
+    this.destination,
+  );
 }
 
 class RouteProvider with ChangeNotifier {

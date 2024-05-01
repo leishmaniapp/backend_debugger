@@ -118,82 +118,83 @@ class UpdateSampleRoute extends StatelessWidget {
                 ),
               ),
               Card(
-                  child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: StatefulBuilder(
-                  builder: (context, setState) => Column(
-                    children: [
-                      Text(
-                        "Current selected date",
-                        style: context.textStyles.bodyLarge,
-                      ),
-                      Text(
-                        "${currentDateTime.year}/${currentDateTime.month}/${currentDateTime.day}"
-                        " (${currentDateTime.hour}:${currentDateTime.minute}:${currentDateTime.second})"
-                        " @ ${currentDateTime.unixtime} UnixTime",
-                      ),
-                      const SizedBox(height: 12.0),
-                      Row(
-                        children: [
-                          Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: StatefulBuilder(
+                    builder: (context, setState) => Column(
+                      children: [
+                        Text(
+                          "Current selected date",
+                          style: context.textStyles.bodyLarge,
+                        ),
+                        Text(
+                          "${currentDateTime.year}/${currentDateTime.month}/${currentDateTime.day}"
+                          " (${currentDateTime.hour}:${currentDateTime.minute}:${currentDateTime.second})"
+                          " @ ${currentDateTime.unixtime} UnixTime",
+                        ),
+                        const SizedBox(height: 12.0),
+                        Row(
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: OutlinedButton(
+                                  onPressed: () => showDatePicker(
+                                    context: context,
+                                    initialDate: currentDateTime,
+                                    firstDate: currentDateTime.subtract(
+                                      const Duration(days: 365),
+                                    ),
+                                    lastDate: currentDateTime.add(
+                                      const Duration(days: 365),
+                                    ),
+                                  ).then((datetime) {
+                                    if (datetime != null) {
+                                      // Replace current datetime with provided one
+                                      setState(
+                                        () => (currentDateTime = datetime),
+                                      );
+                                    }
+                                  }),
+                                  child: const Text("Pick Date"),
+                                )),
+                            Expanded(
                               flex: 2,
                               child: OutlinedButton(
-                                onPressed: () => showDatePicker(
-                                  context: context,
-                                  initialDate: currentDateTime,
-                                  firstDate: currentDateTime.subtract(
-                                    const Duration(days: 365),
-                                  ),
-                                  lastDate: currentDateTime.add(
-                                    const Duration(days: 365),
-                                  ),
-                                ).then((datetime) {
-                                  if (datetime != null) {
-                                    // Replace current datetime with provided one
+                                onPressed: () => showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.fromDateTime(
+                                            currentDateTime))
+                                    .then((time) {
+                                  if (time != null) {
+                                    // Copy current datetime with current time
                                     setState(
-                                      () => (currentDateTime = datetime),
+                                      () => (
+                                        currentDateTime =
+                                            currentDateTime.copyWith(
+                                                minute: time.minute,
+                                                hour: time.hour),
+                                      ),
                                     );
                                   }
                                 }),
-                                child: const Text("Pick Date"),
-                              )),
-                          Expanded(
-                            flex: 2,
-                            child: OutlinedButton(
-                              onPressed: () => showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.fromDateTime(
-                                          currentDateTime))
-                                  .then((time) {
-                                if (time != null) {
-                                  // Copy current datetime with current time
-                                  setState(
-                                    () => (
-                                      currentDateTime =
-                                          currentDateTime.copyWith(
-                                              minute: time.minute,
-                                              hour: time.hour),
-                                    ),
-                                  );
-                                }
-                              }),
-                              child: const Text("Pick Time"),
+                                child: const Text("Pick Time"),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: FilledButton(
-                              onPressed: () => setState(
-                                  () => (currentDateTime = DateTime.now())),
-                              child: const Text("Now"),
+                            Expanded(
+                              flex: 1,
+                              child: FilledButton(
+                                onPressed: () => setState(
+                                    () => (currentDateTime = DateTime.now())),
+                                child: const Text("Now"),
+                              ),
                             ),
-                          ),
-                        ].separatedBy(const SizedBox(width: 8.0)),
-                      )
-                    ],
+                          ].separatedBy(const SizedBox(width: 8.0)),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              )),
+              ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

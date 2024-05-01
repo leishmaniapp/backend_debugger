@@ -34,16 +34,13 @@ class ServerConnectionRoute extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const Text("Use a connection URL containing the required protocol"),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: textController,
-            keyboardType: TextInputType.url,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              label: Text("Server connection URI"),
-              hintText: "rpc://127.0.0.1:8080",
-            ),
+        TextField(
+          controller: textController,
+          keyboardType: TextInputType.url,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            label: Text("Server connection URI"),
+            hintText: "rpc://127.0.0.1:8080",
           ),
         ),
         Padding(

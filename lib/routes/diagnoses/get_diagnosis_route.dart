@@ -31,10 +31,7 @@ class _GetOrDeleteSampleRouteState extends State<GetDiagnosisRoute> {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 24.0,
-          horizontal: 2.0,
-        ),
+        padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,

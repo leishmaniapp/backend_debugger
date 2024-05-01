@@ -28,4 +28,14 @@ abstract class ProviderWithService<S> with ChangeNotifier {
 
   /// Request the service to [SupportedInfrastructure]
   Option<Exception> requestServiceFromInfrastructureWithUri(Uri server);
+
+  /// Stored server [Uri]
+  @protected
+  Uri? internalServerUri;
+
+  /// Get the server connection URI, uri is set via [requestServiceFromInfrastructureWithUri]
+  get serverUri => internalServerUri;
+
+  @override
+  String toString() => "Connected to server ($serverUri)";
 }

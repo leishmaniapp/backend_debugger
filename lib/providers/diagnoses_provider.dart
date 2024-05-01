@@ -12,12 +12,18 @@ class DiagnosesProvider extends ProviderWithService<IDiagnosesService> {
   @override
   Option<Exception> requestServiceFromInfrastructureWithUri(Uri server) =>
       SupportedInfrastructure()
-          .createServiceFromUri(server,
-              grpcBuilder: (timeout, channel) =>
-                  GrpcDiagnosesService(timeout, channel))
+          .createServiceFromUri(
+        server,
+        grpcBuilder: (timeout, channel) => GrpcDiagnosesService(
+          timeout,
+          channel,
+        ),
+      )
           .fold(
               // Forward the error
               (l) => Option.of(l), (r) {
+        // Store the server URI
+        internalServerUri = server;
         // Store the new service
         service = r;
         return const Option.none();

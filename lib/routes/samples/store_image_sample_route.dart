@@ -43,7 +43,7 @@ class StoreImageSampleRoute extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 24.0,
-          horizontal: 2.0,
+          horizontal: 16.0,
         ),
         child: Center(
           child: Column(
@@ -118,36 +118,81 @@ class StoreImageSampleRoute extends StatelessWidget {
                   label: Text("Results - JSON"),
                 ),
               ),
-              Card(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    // Build the asset preview as Stateful
-                    child: StatefulBuilder(
-                      builder: (context, setState) => Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("Select the asset to upload"),
-                          FutureBuilder(
-                            future: AssetsTool().assetsExtension(".jpg"),
-                            builder: (context, snapshot) =>
-                                snapshot.connectionState == ConnectionState.done
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    6.0,
+                  ),
+                  border: Border.all(
+                    color: context.colors.scheme.primary,
+                  ),
+                ),
+                child: StatefulBuilder(
+                  builder: (context, setState) => SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 6.0),
+                                child: Text("Select the asset to upload"),
+                              ),
+                              FutureBuilder(
+                                future: AssetsTool().assetsExtension(".jpg"),
+                                builder: (context, snapshot) => snapshot
+                                            .connectionState ==
+                                        ConnectionState.done
                                     ? Wrap(
                                         children: snapshot.data!
-                                            .map((e) => OutlinedButton(
-                                                  onPressed: () => setState(
-                                                      () => selectedAsset = e),
-                                                  child: Text(e),
+                                            .map((e) => Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(2.0),
+                                                  child: OutlinedButton(
+                                                    onPressed: () => setState(
+                                                        () =>
+                                                            selectedAsset = e),
+                                                    child: Text(e),
+                                                  ),
                                                 ))
                                             .toList())
                                     : const LinearProgressIndicator(),
+                              ),
+                            ],
                           ),
-                          const Divider(),
-                          const Text("Asset preview"),
-                          if (selectedAsset != null) Image.asset(selectedAsset!)
-                        ].separatedBy(const SizedBox(height: 8.0)),
-                      ),
+                        ),
+
+                        const Divider(),
+
+                        // Show the image
+                        AnimatedSwitcher(
+                          duration: const Duration(
+                            milliseconds: 250,
+                          ),
+                          child: (selectedAsset != null)
+                              ? Padding(
+                                  key: ValueKey(selectedAsset!),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 32.0,
+                                    horizontal: 16.0,
+                                  ),
+                                  child: Image.asset(
+                                    selectedAsset!,
+                                  ),
+                                )
+                              : const Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: 16.0,
+                                    top: 8.0,
+                                  ),
+                                  child: Text("Selected asset preview"),
+                                ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -231,7 +276,9 @@ class StoreImageSampleRoute extends StatelessWidget {
                       label: const Text("Upload")),
                 ],
               ),
-            ].separatedBy(const SizedBox(height: 16.0)),
+            ].separatedBy(
+              const SizedBox(height: 16.0),
+            ),
           ),
         ),
       ),

@@ -18,50 +18,53 @@ class AuthCredentialsRoute extends StatelessWidget {
     final emailTextController = TextEditingController();
     final passwordTextController = TextEditingController();
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(
-          Icons.people_alt_rounded,
-          size: 64.0,
-        ),
-        Text(
-          "Enter authentication credentials",
-          style: context.textStyles.bodyLarge,
-        ),
-        TextField(
-          keyboardType: TextInputType.emailAddress,
-          controller: emailTextController,
-          decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Email",
-              hintText: "someone@emailserver.com"),
-        ),
-        TextField(
-          obscureText: true,
-          keyboardType: TextInputType.text,
-          controller: passwordTextController,
-          decoration: const InputDecoration(
-              border: OutlineInputBorder(), labelText: "Password"),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            OutlinedButton.icon(
-                onPressed: onCancelConnection,
-                icon: const Icon(Icons.power_off_rounded),
-                label: const Text("Cancel connection")),
-            FilledButton.icon(
-                onPressed: () => onAuthenticate(
-                      emailTextController.value.text,
-                      passwordTextController.value.text,
-                    ),
-                icon: const Icon(Icons.verified_user_rounded),
-                label: const Text("Authenticate")),
-          ],
-        )
-      ].separatedBy(const SizedBox(height: 16)),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.people_alt_rounded,
+            size: 64.0,
+          ),
+          Text(
+            "Enter authentication credentials",
+            style: context.textStyles.bodyLarge,
+          ),
+          TextField(
+            keyboardType: TextInputType.emailAddress,
+            controller: emailTextController,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Email",
+                hintText: "someone@emailserver.com"),
+          ),
+          TextField(
+            obscureText: true,
+            keyboardType: TextInputType.text,
+            controller: passwordTextController,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(), labelText: "Password"),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OutlinedButton.icon(
+                  onPressed: onCancelConnection,
+                  icon: const Icon(Icons.power_off_rounded),
+                  label: const Text("Cancel connection")),
+              FilledButton.icon(
+                  onPressed: () => onAuthenticate(
+                        emailTextController.value.text,
+                        passwordTextController.value.text,
+                      ),
+                  icon: const Icon(Icons.verified_user_rounded),
+                  label: const Text("Authenticate")),
+            ],
+          )
+        ].separatedBy(const SizedBox(height: 16)),
+      ),
     );
   }
 }

@@ -33,44 +33,50 @@ class _GenericMenuRouteState extends State<GenericMenuRoute> {
       (valueWidget != null)
           ? valueWidget!
           : SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Wrap(
-                    // Wrap each destination into a card button widget
-                    children: widget.destinations
-                        .map(
-                          (e) => _MenuRouteDestinationCardButtonWidget(
-                            key: UniqueKey(),
-                            destination: e,
-                            onClick: () {
-                              // Change the widget by the one created by the buildrer
-                              setState(() => valueWidget = e.builder.call(() {
-                                    // Set the widget back to null to show menu
-                                    setState(() => valueWidget = null);
-                                  }));
-                            },
-                          ),
-                        )
-                        .toList(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OutlinedButton.icon(
-                            onPressed: widget.onExit,
-                            icon: const Icon(Icons.power_off_rounded),
-                            label: const Text("Cancel connection")),
-                        FilledButton.icon(
-                            onPressed: widget.onNext,
-                            icon: const Icon(Icons.arrow_forward_rounded),
-                            label: const Text("Continue")),
-                      ],
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Wrap(
+                      // Wrap each destination into a card button widget
+                      children: widget.destinations
+                          .map(
+                            (e) => _MenuRouteDestinationCardButtonWidget(
+                              key: UniqueKey(),
+                              destination: e,
+                              onClick: () {
+                                // Change the widget by the one created by the buildrer
+                                setState(() => valueWidget = e.builder.call(() {
+                                      // Set the widget back to null to show menu
+                                      setState(() => valueWidget = null);
+                                    }));
+                              },
+                            ),
+                          )
+                          .toList(),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12.0,
+                        horizontal: 12.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          OutlinedButton.icon(
+                              onPressed: widget.onExit,
+                              icon: const Icon(Icons.power_off_rounded),
+                              label: const Text("Cancel connection")),
+                          FilledButton.icon(
+                              onPressed: widget.onNext,
+                              icon: const Icon(Icons.arrow_forward_rounded),
+                              label: const Text("Continue")),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
 }
@@ -115,10 +121,12 @@ class _MenuRouteDestinationCardButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
         child: InkWell(
+          borderRadius: BorderRadius.circular(
+            12.0,
+          ),
           onTap: () => onClick.call(),
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
               vertical: 16.0,
             ),
             child: Center(

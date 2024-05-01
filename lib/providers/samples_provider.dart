@@ -23,6 +23,8 @@ class SamplesProvider extends ProviderWithService<ISampleService> {
         grpcBuilder: (timeout, channel) => GrpcSampleService(timeout, channel),
       )
           .fold((l) => Option.of(l), (r) {
+        // Store the server URI
+        internalServerUri = server;
         // Store the new service
         service = r;
         return const Option.none();

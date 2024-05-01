@@ -24,6 +24,8 @@ class AuthProvider extends ProviderWithService<IAuthService> {
           .fold(
               // Forward the error
               (l) => Option.of(l), (r) {
+        // Store the server URI
+        internalServerUri = server;
         // Store the new service
         service = r;
         return const Option.none();
@@ -51,9 +53,14 @@ class AuthProvider extends ProviderWithService<IAuthService> {
 
   /// Authenticate in remote server
   Future<Option<CustomException>> authenticate(
-          String email, String password) async =>
-      (await service.authenticate(email, password)).match((l) => Option.of(l),
-          (token) {
+    String email,
+    String password,
+  ) async =>
+      (await service.authenticate(
+        email,
+        password,
+      ))
+          .match((l) => Option.of(l), (token) {
         // Store the token
         _authToken = token;
         notifyListeners();

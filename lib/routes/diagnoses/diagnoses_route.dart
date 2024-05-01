@@ -5,6 +5,7 @@ import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/providers/diagnoses_provider.dart';
 import 'package:backend_debugger/providers/route_provider.dart';
 import 'package:backend_debugger/routes/diagnoses/get_diagnosis_route.dart';
+import 'package:backend_debugger/routes/diagnoses/store_diagnosis_route.dart';
 import 'package:backend_debugger/routes/generic_menu_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,37 @@ class DiagnosesRoute extends StatelessWidget {
         onExit: () => provider.disconnect(),
         onNext: context.read<RouteProvider>().goNextRoute,
         destinations: [
+          MenuRouteDestination(
+            icon: Icons.upload_file_rounded,
+            title: "StoreDiagnosis",
+            subtitle: "Store a new diagnosis with UUID and results",
+            builder: (onExit) => StoreDiagnosisRoute(
+              onCancel: onExit,
+              onStoreDiagnosis: (diagnosis) => provider
+                  .storeDiagnosis(
+                diagnosis,
+              )
+                  .apply((future) {
+                // Show the dialog
+                showDialog(
+                  context: context,
+                  builder: (context) => FutureLoadingDialog(
+                    // Call the sample storage service
+                    future: future,
+                    builder: (context, value) => value.data!.match(
+                      () => SimpleIgnoreDialog(
+                        const Text("Successfully uploaded sample"),
+                        Text(
+                          "Diagnosis (${diagnosis.id}) successfully uploaded",
+                        ),
+                      ),
+                      (e) => ExceptionAlertDialog(e),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
           MenuRouteDestination(
             icon: Icons.download_rounded,
             title: "GetDiagnosis",
