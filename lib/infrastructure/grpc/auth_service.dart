@@ -10,9 +10,11 @@ import 'package:grpc/grpc.dart';
 
 class GrpcAuthService extends GrpcService<AuthServiceClient>
     implements IAuthService {
-  /// Create the AuthService given the ClientChannel
-  GrpcAuthService(Duration timeout, ClientChannel channel)
-      : super(
+  /// Create the [IAuthService] given the [ClientChannel]
+  GrpcAuthService(
+    Duration timeout,
+    ClientChannel channel,
+  ) : super(
           timeout,
           channel,
           AuthServiceClient(channel),

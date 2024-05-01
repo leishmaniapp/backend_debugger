@@ -1,6 +1,10 @@
 #ifndef FLUTTER_MY_APPLICATION_H_
 #define FLUTTER_MY_APPLICATION_H_
 
+#define MY_APPLICATION_TITLE "LeishmaniappCloudServicesV2 Debugger"
+#define MY_APPLICATION_WIDTH 500
+#define MY_APPLICATION_HEIGHT 800
+
 #include <gtk/gtk.h>
 
 G_DECLARE_FINAL_TYPE(MyApplication, my_application, MY, APPLICATION,

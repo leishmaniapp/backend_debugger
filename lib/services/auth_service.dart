@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart';
 
 typedef TokenString = String;
 
+/// Authenticate and validate tokens to the authentication service
 abstract interface class IAuthService {
   /// Authenticate user in the remote server, returns either an exception or a token
   FutureOr<Either<CustomException, TokenString>> authenticate(
