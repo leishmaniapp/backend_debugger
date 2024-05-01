@@ -1,4 +1,5 @@
 import 'package:backend_debugger/exception/exception.dart';
+import 'package:backend_debugger/infrastructure/grpc/auth_service.dart';
 import 'package:backend_debugger/infrastructure/support.dart';
 import 'package:backend_debugger/proto/auth.pb.dart';
 import 'package:backend_debugger/proto/model.pb.dart';
@@ -15,9 +16,14 @@ class AuthProvider extends ProviderWithService<IAuthService> {
 
   @override
   Option<Exception> requestServiceFromInfrastructureWithUri(Uri server) =>
-      SupportedInfrastructure().createAuthServiceFromUri(server).fold(
-          // Forward the error
-          (l) => Option.of(l), (r) {
+      SupportedInfrastructure()
+          .createServiceFromUri(
+        server,
+        grpcBuilder: (timeout, channel) => GrpcAuthService(timeout, channel),
+      )
+          .fold(
+              // Forward the error
+              (l) => Option.of(l), (r) {
         // Store the new service
         service = r;
         return const Option.none();

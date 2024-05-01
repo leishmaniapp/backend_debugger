@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:backend_debugger/exception/exception.dart';
+import 'package:backend_debugger/infrastructure/grpc/samples_service.dart';
 import 'package:backend_debugger/infrastructure/support.dart';
 import 'package:backend_debugger/proto/model.pb.dart';
 import 'package:backend_debugger/proto/types.pb.dart';
@@ -16,9 +17,12 @@ class SamplesProvider extends ProviderWithService<ISampleService> {
 
   @override
   Option<Exception> requestServiceFromInfrastructureWithUri(Uri server) =>
-      SupportedInfrastructure().createSampleServiceFromUri(server).fold(
-          // Forward the error
-          (l) => Option.of(l), (r) {
+      SupportedInfrastructure()
+          .createServiceFromUri(
+        server,
+        grpcBuilder: (timeout, channel) => GrpcSampleService(timeout, channel),
+      )
+          .fold((l) => Option.of(l), (r) {
         // Store the new service
         service = r;
         return const Option.none();
