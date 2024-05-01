@@ -15,13 +15,15 @@ import 'package:unixtime/unixtime.dart';
 import 'package:uuid/uuid.dart';
 
 class UpdateSampleRoute extends StatelessWidget {
-  final Function() onCancelConnection;
+  /// Cancel the operation
+  final Function() onCancel;
 
+  /// Called for uploading the changes
   final void Function(Sample) onUpdateSample;
 
-  const UpdateSampleRoute(
-    this.onCancelConnection,
-    this.onUpdateSample, {
+  const UpdateSampleRoute({
+    required this.onCancel,
+    required this.onUpdateSample,
     super.key,
   });
 
@@ -197,7 +199,7 @@ class UpdateSampleRoute extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton.icon(
-                      onPressed: onCancelConnection,
+                      onPressed: onCancel,
                       icon: const Icon(Icons.home_repair_service_rounded),
                       label: const Text("Back to services")),
                   FilledButton.icon(

@@ -4,13 +4,15 @@ import 'package:backend_debugger/proto/model.pb.dart';
 import 'package:flutter/material.dart';
 
 class GetUndeliveredRoute extends StatefulWidget {
-  final Function() onCancelConnection;
+  /// Cancel the operation
+  final Function() onCancel;
 
-  final Future<List<Sample>?>? Function(String email) onGetSample;
+  /// Called for getting the results
+  final Future<List<Sample>?>? Function(String email) onGetResults;
 
-  const GetUndeliveredRoute(
-    this.onCancelConnection,
-    this.onGetSample, {
+  const GetUndeliveredRoute({
+    required this.onCancel,
+    required this.onGetResults,
     super.key,
   });
 
@@ -69,7 +71,7 @@ class _GetUndeliveredRouteState extends State<GetUndeliveredRoute> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton.icon(
-                      onPressed: widget.onCancelConnection,
+                      onPressed: widget.onCancel,
                       icon: const Icon(Icons.home_repair_service_rounded),
                       label: const Text("Back to services")),
                   FilledButton.icon(
@@ -77,7 +79,7 @@ class _GetUndeliveredRouteState extends State<GetUndeliveredRoute> {
                         try {
                           // Call getSample and store the result
                           setState(() {
-                            result = widget.onGetSample.call(
+                            result = widget.onGetResults.call(
                               textEmailController.value.text,
                             );
                           });

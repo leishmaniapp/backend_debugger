@@ -19,6 +19,9 @@ abstract class ProviderWithService<S> with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Disconnect from remote server
+  void disconnect() => (service = null);
+
   /// Get the non-null service
   @protected
   S get service => _service!;

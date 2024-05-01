@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class GetOrDeleteSampleRoute extends StatefulWidget {
-  final Function() onCancelConnection;
+  /// Called when the operation is cancelled
+  final Function() onCancel;
 
+  /// Called for sample requests
   final Future<Object?>? Function(String uuid, int sample) onGetSample;
 
-  const GetOrDeleteSampleRoute(
-    this.onCancelConnection,
-    this.onGetSample, {
+  const GetOrDeleteSampleRoute({
+    required this.onCancel,
+    required this.onGetSample,
     super.key,
   });
 
@@ -77,7 +79,7 @@ class _GetOrDeleteSampleRouteState extends State<GetOrDeleteSampleRoute> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton.icon(
-                      onPressed: widget.onCancelConnection,
+                      onPressed: widget.onCancel,
                       icon: const Icon(Icons.home_repair_service_rounded),
                       label: const Text("Back to services")),
                   FilledButton.icon(
