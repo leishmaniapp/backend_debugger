@@ -38,7 +38,7 @@ class _GetUndeliveredRouteState extends State<GetUndeliveredRoute> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.image,
+                Icons.delivery_dining_rounded,
                 size: 64.0,
               ),
               const Text("Enter specialist email"),

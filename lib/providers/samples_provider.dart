@@ -11,8 +11,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
-class SampleProvider extends ProviderWithService<ISampleService> {
-  SampleProvider([super.service]);
+class SamplesProvider extends ProviderWithService<ISampleService> {
+  SamplesProvider([super.service]);
 
   @override
   Option<Exception> requestServiceFromInfrastructureWithUri(Uri server) =>

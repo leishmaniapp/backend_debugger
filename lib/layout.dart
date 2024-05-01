@@ -1,5 +1,10 @@
+import 'package:backend_debugger/providers/auth_provider.dart';
+import 'package:backend_debugger/providers/diagnoses_provider.dart';
 import 'package:backend_debugger/providers/route_provider.dart';
+import 'package:backend_debugger/providers/samples_provider.dart';
 import 'package:backend_debugger/routes/auth/auth_route.dart';
+import 'package:backend_debugger/routes/diagnoses/diagnoses_route.dart';
+import 'package:backend_debugger/routes/generic_connection_route.dart';
 import 'package:backend_debugger/routes/home_route.dart';
 import 'package:backend_debugger/routes/samples/samples_route.dart';
 import 'package:flutter/material.dart';
@@ -27,35 +32,59 @@ class _LayoutState extends State<Layout> {
           ),
         ),
         // Authentication route
-        const DestinationWithRoute(
-          AuthRoute(),
-          NavigationDestination(
+        DestinationWithRoute(
+          GenericConnectionRoute<AuthProvider>(
+            connectionTitle: "Connect to the authentication service",
+            builder: (contex, provider) => AuthRoute(provider: provider),
+          ),
+          const NavigationDestination(
             icon: Icon(Icons.key_rounded),
             label: "Auth",
           ),
         ),
-        // About route
-        const DestinationWithRoute(
-          SamplesRoute(),
-          NavigationDestination(
+        // Samples routes
+        DestinationWithRoute(
+          GenericConnectionRoute<SamplesProvider>(
+            connectionTitle: "Connect to the samples service",
+            builder: (context, provider) => SamplesRoute(provider: provider),
+          ),
+          const NavigationDestination(
             icon: Icon(Icons.image),
             label: "Samples",
           ),
         ),
+        // Diagnoses route
+        DestinationWithRoute(
+          GenericConnectionRoute<DiagnosesProvider>(
+            connectionTitle: "Connect to the diagnoses service",
+            builder: (context, provider) => DiagnosesRoute(provider: provider),
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.text_snippet_rounded),
+            label: "Diagnoses",
+          ),
+        )
       ];
     });
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: Center(
         child: PageView(
+          clipBehavior: Clip.none,
           scrollDirection: Axis.horizontal,
           controller: routeProvider.pageController,
           onPageChanged: (newDestinationIndex) => routeProvider.goToRouteIndex(
             newDestinationIndex,
             animate: false,
           ),
-          children: routeProvider.destinations.map((e) => e.route).toList(),
+          children: routeProvider.destinations
+              .map(
+                (e) => Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: e.route,
+                ),
+              )
+              .toList(),
         ),
       ),
       bottomNavigationBar: NavigationBar(

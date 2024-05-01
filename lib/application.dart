@@ -1,4 +1,5 @@
-import 'package:backend_debugger/providers/sample_provider.dart';
+import 'package:backend_debugger/providers/diagnoses_provider.dart';
+import 'package:backend_debugger/providers/samples_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
@@ -17,7 +18,8 @@ class Application extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (context) => RouteProvider()),
           ChangeNotifierProvider(create: (context) => AuthProvider()),
-          ChangeNotifierProvider(create: (context) => SampleProvider()),
+          ChangeNotifierProvider(create: (context) => SamplesProvider()),
+          ChangeNotifierProvider(create: (context) => DiagnosesProvider()),
         ],
         builder: (context, child) => MaterialApp(
           theme: ThemeData(
