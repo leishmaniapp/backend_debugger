@@ -1,3 +1,4 @@
+import 'package:backend_debugger/providers/analysis_provider.dart';
 import 'package:backend_debugger/providers/diagnoses_provider.dart';
 import 'package:backend_debugger/providers/samples_provider.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class Application extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => AuthProvider()),
           ChangeNotifierProvider(create: (context) => SamplesProvider()),
           ChangeNotifierProvider(create: (context) => DiagnosesProvider()),
+          ChangeNotifierProvider(create: (context) => AnalysisProvider()),
         ],
         builder: (context, child) => MaterialApp(
           theme: ThemeData(

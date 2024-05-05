@@ -1,7 +1,9 @@
+import 'package:backend_debugger/providers/analysis_provider.dart';
 import 'package:backend_debugger/providers/auth_provider.dart';
 import 'package:backend_debugger/providers/diagnoses_provider.dart';
 import 'package:backend_debugger/providers/route_provider.dart';
 import 'package:backend_debugger/providers/samples_provider.dart';
+import 'package:backend_debugger/routes/analysis/analysis_route.dart';
 import 'package:backend_debugger/routes/auth/auth_route.dart';
 import 'package:backend_debugger/routes/diagnoses/diagnoses_route.dart';
 import 'package:backend_debugger/routes/generic_connection_route.dart';
@@ -63,7 +65,15 @@ class _LayoutState extends State<Layout> {
             icon: Icon(Icons.text_snippet_rounded),
             label: "Diagnoses",
           ),
-        )
+        ),
+        DestinationWithRoute(
+          GenericConnectionRoute<AnalysisProvider>(
+            connectionTitle: "Connect to the analysis service",
+            builder: (contex, provider) => AnalysisRoute(provider: provider),
+          ),
+          const NavigationDestination(
+              icon: Icon(Icons.analytics_rounded), label: "Analysis"),
+        ),
       ];
     });
 
