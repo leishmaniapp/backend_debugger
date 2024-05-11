@@ -82,8 +82,6 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            /// Requests block
-
             // Diagnosis UUID
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -181,8 +179,8 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
             // Action buttons
             Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 12.0,
                 horizontal: 12.0,
+                vertical: 2.0,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -247,7 +245,11 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
               ),
             ),
 
-            const Divider(),
+            const Divider(
+              height: 0,
+              indent: 0,
+              thickness: 0,
+            ),
 
             /// Response block
             (widget.provider.responses.isEmpty)
@@ -264,46 +266,57 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
                       ),
                     ],
                   )
-                : ListView(
-                    children: widget.provider.responses
-                        .mapIndexed(
-                          (i, e) => Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    margin: const EdgeInsets.only(
-                                      bottom: 8.0,
-                                    ),
-                                    padding: const EdgeInsets.all(
-                                      8.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: context.colors.scheme.primary,
-                                      borderRadius: BorderRadius.circular(
-                                        12.0,
+                : Expanded(
+                    child: ListView(
+                      children: widget.provider.responses
+                          .mapIndexed(
+                            (i, e) => Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      margin: const EdgeInsets.only(
+                                        bottom: 8.0,
+                                      ),
+                                      padding: const EdgeInsets.all(
+                                        8.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: context.colors.scheme.primary,
+                                        borderRadius: BorderRadius.circular(
+                                          12.0,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "Response #$i",
+                                        style: TextStyle(
+                                          color:
+                                              context.colors.scheme.onPrimary,
+                                        ),
                                       ),
                                     ),
-                                    child: Text(
-                                      "Response #$i",
-                                      style: TextStyle(
-                                        color: context.colors.scheme.onPrimary,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        e.toString().trim(),
                                       ),
                                     ),
-                                  ),
-                                  Text(e.toString().trim()),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                        .toList(),
+                          )
+                          .toList(),
+                    ),
                   ),
-          ].separatedBy(const SizedBox(
-            height: 16.0,
-          )),
+          ].separatedBy(
+            const SizedBox(
+              height: 16.0,
+            ),
+          ),
         ),
       );
 }

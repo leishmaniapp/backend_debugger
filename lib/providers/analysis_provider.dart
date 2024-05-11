@@ -58,6 +58,7 @@ class AnalysisProvider extends ProviderWithService<IAnalysisService> {
       GetIt.I.get<Logger>().i("Response arrived ($event)");
       // Add response to the list of responses
       responses.add(event);
+
       // Notify children
       notifyListeners();
     });
