@@ -1,3 +1,4 @@
+import 'package:backend_debugger/proto/model.pb.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/proto/types.pb.dart';
@@ -24,4 +25,11 @@ extension StatusResponseToException on StatusResponse {
         _ => Some(UndefinedServerException(
             "($code) -> ${description.isEmpty ? "no description provided" : description}")),
       };
+}
+
+extension SpecialistSubtypesConvertion on Specialist {
+  Specialist_Record toRecord() => Specialist_Record(
+        email: email,
+        name: name,
+      );
 }

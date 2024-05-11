@@ -1,16 +1,15 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/proto/model.pb.dart';
+import 'package:backend_debugger/proto/types.pb.dart';
 import 'package:fpdart/fpdart.dart';
 
 /// Upload, Update, Get and Delete samples in the remote database
 abstract interface class ISampleService {
   /// Store an image and its sample metadata
   FutureOr<Option<CustomException>> storeImageSample({
-    required ByteData imageBytes,
-    required String imageMimeType,
+    required ImageBytes image,
     required Sample sample,
   });
 

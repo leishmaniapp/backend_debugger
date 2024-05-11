@@ -15,9 +15,18 @@ abstract class ProviderWithService<S> with ChangeNotifier {
   set service(S? service) {
     GetIt.I.get<Logger>().i(
         "Replaced '$runtimeType' service ($S) with '${service.runtimeType}'");
+
     _service = service;
+    // Call either init or destroy
+    (service == null) ? onDispose() : onInit();
     notifyListeners();
   }
+
+  /// Override for initial behaviour
+  void onInit() {}
+
+  /// Override for final behaviour
+  void onDispose() {}
 
   /// Disconnect from remote server
   void disconnect() => (service = null);

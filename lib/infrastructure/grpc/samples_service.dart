@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:backend_debugger/exception/exception.dart';
 import 'package:backend_debugger/infrastructure/grpc/grpc_service.dart';
@@ -19,25 +18,20 @@ class GrpcSampleService extends GrpcService<SamplesServiceClient>
   /// Store an image and its sample metadata
   @override
   Future<Option<CustomException>> storeImageSample({
-    required ByteData imageBytes,
-    required String imageMimeType,
+    required ImageBytes image,
     required Sample sample,
   }) =>
       // Order of operations is the following
       // TaskEither<Exception, StatusCode> -> Either<Exception, Option<Exception>> -> Either<Exception, Unit> -> Option<Exception>
       TaskEither.tryCatch(
               () => stub.storeImageSample(
-                    ImageSampleRequest(
-                      sample: sample,
-                      image: ImageBytes(
-                        mime: imageMimeType,
-                        data: imageBytes.buffer.asUint8ClampedList(),
-                      ),
-                    ),
+                    ImageSampleRequest(sample: sample, image: image),
                   ),
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException)
           // Transform the result into an Either<Error, Unit> instead of StatusCode
           .chainEither((r) => r
@@ -63,7 +57,9 @@ class GrpcSampleService extends GrpcService<SamplesServiceClient>
               () => stub.updateSample(sample),
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException)
           // Transform the result into an Either<Error, Unit> instead of StatusCode
           .chainEither((r) => r
@@ -89,7 +85,9 @@ class GrpcSampleService extends GrpcService<SamplesServiceClient>
                   sample: sample)), // Transform error into a NetworkException
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException)
           .chainEither((r) => r.status
               .toException()
@@ -109,7 +107,9 @@ class GrpcSampleService extends GrpcService<SamplesServiceClient>
                   sample: sample)), // Transform error into a NetworkException
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException)
           .chainEither((r) => r.status
               .toException()
@@ -128,7 +128,9 @@ class GrpcSampleService extends GrpcService<SamplesServiceClient>
                   UndeliveredRequest(specialist: email)),
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException)
           .chainEither((r) => r.status
               .toException()

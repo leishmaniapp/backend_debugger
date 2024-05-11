@@ -39,6 +39,10 @@ dependencies:
   grpc: ^3.2.4
   # SHA256 calculation
   crypto: ^3.0.3
+  # Pick file for analysis request
+  file_picker: ^8.0.3
+  # Detect the MIME type of the analysis image
+  mime: ^1.0.5
 
 
 dev_dependencies:

@@ -12,7 +12,7 @@ void main() async {
 
   // Register the global timeout
   GetIt.I.registerSingleton(
-    const Duration(minutes: 1),
+    const Duration(seconds: 15),
     instanceName: 'timeout',
   );
 

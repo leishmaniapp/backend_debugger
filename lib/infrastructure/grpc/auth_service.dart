@@ -33,7 +33,9 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
               // Transform error into a NetworkException
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException)
           // Transform the result into an Either<Error, Value> instead of AuthResponse
           .chainEither((r) => r.status
@@ -54,7 +56,9 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
               // Transform error into a NetworkException
               (o, s) => (RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException))
 
           // Transform the result into an Either<Error, Unit> instead of StatusCode
@@ -81,7 +85,9 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
               // Transform error into a NetworkException
               (o, s) => (RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
-                    (o as GrpcError).message.toString(),
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
                   ) as NetworkException))
 
           // Transform the result into an Either<Error, Unit> instead of StatusCode

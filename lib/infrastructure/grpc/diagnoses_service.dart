@@ -26,9 +26,11 @@ class GrpcDiagnosesService extends GrpcService<DiagnosesServiceClient>
   Future<Either<CustomException, Diagnosis>> getDiagnosis(String uuid) =>
       TaskEither.tryCatch(
               () => stub.getDiagnosis(DiagnosisRequest(uuid: uuid)),
-              (o, s) =>
-                  RemoteServiceException((o as GrpcError).message.toString())
-                      as NetworkException)
+              (o, s) => RemoteServiceException(
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
+                  ) as NetworkException)
           .chainEither((r) => r.status
               .toException()
               .toEither(
@@ -41,9 +43,11 @@ class GrpcDiagnosesService extends GrpcService<DiagnosesServiceClient>
   Future<Option<CustomException>> storeDiagnosis(Diagnosis diagnosis) =>
       TaskEither.tryCatch(
               () => stub.storeDiagnosis(diagnosis),
-              (o, s) =>
-                  RemoteServiceException((o as GrpcError).message.toString())
-                      as NetworkException)
+              (o, s) => RemoteServiceException(
+                    (o is GrpcError)
+                        ? (o).message.toString()
+                        : (o as Exception).toString(),
+                  ) as NetworkException)
           .chainEither((r) => r
               .toException()
               .toEither(

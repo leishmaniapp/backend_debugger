@@ -16,6 +16,14 @@ class GrpcAnalysisService extends GrpcService<AnalysisServiceClient>
 
   /// Start a gRPC streamed analysis
   @override
-  Stream<AnalysisResponse> startAnalysis(Stream<AnalysisRequest> request) =>
-      stub.startAnalysis(request);
+  Stream<AnalysisResponse> startAnalysis(
+    Stream<AnalysisRequest> request,
+    String from,
+  ) =>
+      stub.startAnalysis(
+        request,
+        options: CallOptions(
+          metadata: {"from": from},
+        ),
+      );
 }

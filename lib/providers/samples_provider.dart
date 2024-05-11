@@ -7,7 +7,6 @@ import 'package:backend_debugger/proto/model.pb.dart';
 import 'package:backend_debugger/proto/types.pb.dart';
 import 'package:backend_debugger/providers/provider_with_service.dart';
 import 'package:backend_debugger/services/sample_service.dart';
-import 'package:backend_debugger/tools/assets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -32,18 +31,14 @@ class SamplesProvider extends ProviderWithService<ISampleService> {
 
   /// Store an image and its sample metadata
   Future<Option<CustomException>> storeImageSample(
-      String asset, Sample request) async {
+      ImageBytes asset, Sample request) async {
     try {
-      // Get image data in bytes
-      final imageBytes = (await AssetsTool().loadBytes(asset)).asByteData();
-
       GetIt.I.get<Logger>().t(
-            "Uploading (${request.runtimeType}), ${request.toString()} with (${imageBytes.lengthInBytes}) bytes of image data",
+            "Uploading (${request.runtimeType}), ${request.toString()} with (${asset.data.length}) bytes of image data",
           );
 
       return service.storeImageSample(
-        imageBytes: imageBytes,
-        imageMimeType: "image/jpeg",
+        image: asset,
         sample: request,
       );
     } catch (e) {
