@@ -39,7 +39,10 @@ class AnalysisProvider extends ProviderWithService<IAnalysisService> {
 
   /// Send the new request to the remote service
   void sendRequest(AnalysisRequest request) {
-    GetIt.I.get<Logger>().i("Sent new request ($request)");
+    GetIt.I.get<Logger>().i(
+          "Sent new request with size (${request.image.data.length ~/ 1024}) KiB\n"
+          "${request.metadata}",
+        );
     _requestController.add(request);
   }
 
