@@ -14,7 +14,10 @@ abstract class GrpcService<C extends Client> implements Disposable {
   /// Service stub
   final C stub;
 
-  const GrpcService(this.timeout, this.channel, this.stub);
+  /// Additional call options for remote service
+  final CallOptions? options;
+
+  const GrpcService(this.timeout, this.channel, this.stub, [this.options]);
 
   @override
   FutureOr onDispose() {

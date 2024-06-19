@@ -13,11 +13,13 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
   /// Create the [IAuthService] given the [ClientChannel]
   GrpcAuthService(
     Duration timeout,
-    ClientChannel channel,
-  ) : super(
+    ClientChannel channel, [
+    CallOptions? options,
+  ]) : super(
           timeout,
           channel,
           AuthServiceClient(channel),
+          options,
         );
 
   @override
@@ -28,7 +30,10 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
       TaskEither.tryCatch(
               // Call to authentication with timeout Future into TetworkExceptionask
               () => stub
-                  .authenticate(AuthRequest(email: email, password: password))
+                  .authenticate(
+                    AuthRequest(email: email, password: password),
+                    options: super.options,
+                  )
                   .timeout(timeout),
               // Transform error into a NetworkException
               (o, s) => RemoteServiceException(
@@ -52,7 +57,10 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
       // Order of operations is the following
       // TaskEither<Exception, StatusCode> -> Either<Exception, Option<Exception>> -> Either<Exception, Unit> -> Option<Exception>
       TaskEither.tryCatch(
-              () => stub.verifyToken(TokenRequest(token: token)),
+              () => stub.verifyToken(
+                    TokenRequest(token: token),
+                    options: super.options,
+                  ),
               // Transform error into a NetworkException
               (o, s) => (RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
@@ -81,7 +89,10 @@ class GrpcAuthService extends GrpcService<AuthServiceClient>
       // Order of operations is the following
       // TaskEither<Exception, StatusCode> -> Either<Exception, Option<Exception>> -> Either<Exception, Unit> -> Option<Exception>
       TaskEither.tryCatch(
-              () => stub.invalidateSession(TokenRequest(token: token)),
+              () => stub.invalidateSession(
+                    TokenRequest(token: token),
+                    options: super.options,
+                  ),
               // Transform error into a NetworkException
               (o, s) => (RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException

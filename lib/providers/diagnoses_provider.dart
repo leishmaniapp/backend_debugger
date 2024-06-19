@@ -7,16 +7,23 @@ import 'package:backend_debugger/proto/model.pb.dart';
 import 'package:backend_debugger/providers/provider_with_service.dart';
 import 'package:backend_debugger/services/diagnoses_service.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:grpc/grpc.dart';
 
 class DiagnosesProvider extends ProviderWithService<IDiagnosesService> {
   @override
-  Option<Exception> requestServiceFromInfrastructureWithUri(Uri server) =>
+  Option<Exception> requestServiceFromInfrastructureWithUri(
+    Uri server, [
+    String? authToken,
+  ]) =>
       SupportedInfrastructure()
           .createServiceFromUri(
         server,
         grpcBuilder: (timeout, channel) => GrpcDiagnosesService(
           timeout,
           channel,
+          authToken != null
+              ? CallOptions(metadata: {"authorization": "Bearer $authToken"})
+              : null,
         ),
       )
           .fold(

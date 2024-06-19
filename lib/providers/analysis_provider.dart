@@ -7,16 +7,25 @@ import 'package:backend_debugger/providers/provider_with_service.dart';
 import 'package:backend_debugger/services/analysis_service.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
+import 'package:grpc/grpc.dart';
 import 'package:logger/logger.dart';
 
 class AnalysisProvider extends ProviderWithService<IAnalysisService> {
   @override
-  Option<Exception> requestServiceFromInfrastructureWithUri(Uri server) =>
+  Option<Exception> requestServiceFromInfrastructureWithUri(
+    Uri server, [
+    String? authToken,
+  ]) =>
       SupportedInfrastructure()
           .createServiceFromUri(
         server,
-        grpcBuilder: (timeout, channel) =>
-            GrpcAnalysisService(timeout, channel),
+        grpcBuilder: (timeout, channel) => GrpcAnalysisService(
+          timeout,
+          channel,
+          authToken != null
+              ? CallOptions(metadata: {"authorization": "Bearer $authToken"})
+              : null,
+        ),
       )
           .fold(
               // Forward the error

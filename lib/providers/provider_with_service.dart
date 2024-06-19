@@ -36,7 +36,10 @@ abstract class ProviderWithService<S> with ChangeNotifier {
   S get service => _service!;
 
   /// Request the service to [SupportedInfrastructure]
-  Option<Exception> requestServiceFromInfrastructureWithUri(Uri server);
+  Option<Exception> requestServiceFromInfrastructureWithUri(
+    Uri server, [
+    String? authToken,
+  ]);
 
   /// Stored server [Uri]
   @protected

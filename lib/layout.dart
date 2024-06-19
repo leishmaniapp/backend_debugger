@@ -6,6 +6,7 @@ import 'package:backend_debugger/providers/samples_provider.dart';
 import 'package:backend_debugger/routes/analysis/analysis_route.dart';
 import 'package:backend_debugger/routes/auth/auth_route.dart';
 import 'package:backend_debugger/routes/diagnoses/diagnoses_route.dart';
+import 'package:backend_debugger/routes/generic_connection_authenticated_route.dart';
 import 'package:backend_debugger/routes/generic_connection_route.dart';
 import 'package:backend_debugger/routes/home_route.dart';
 import 'package:backend_debugger/routes/samples/samples_route.dart';
@@ -46,7 +47,7 @@ class _LayoutState extends State<Layout> {
         ),
         // Samples routes
         DestinationWithRoute(
-          GenericConnectionRoute<SamplesProvider>(
+          GenericConnectionAuthenticatedRoute<SamplesProvider>(
             connectionTitle: "Connect to the samples service",
             builder: (context, provider) => SamplesRoute(provider: provider),
           ),
@@ -57,7 +58,7 @@ class _LayoutState extends State<Layout> {
         ),
         // Diagnoses route
         DestinationWithRoute(
-          GenericConnectionRoute<DiagnosesProvider>(
+          GenericConnectionAuthenticatedRoute<DiagnosesProvider>(
             connectionTitle: "Connect to the diagnoses service",
             builder: (context, provider) => DiagnosesRoute(provider: provider),
           ),
@@ -67,7 +68,7 @@ class _LayoutState extends State<Layout> {
           ),
         ),
         DestinationWithRoute(
-          GenericConnectionRoute<AnalysisProvider>(
+          GenericConnectionAuthenticatedRoute<AnalysisProvider>(
             connectionTitle: "Connect to the analysis service",
             builder: (contex, provider) => AnalysisRoute(provider: provider),
           ),

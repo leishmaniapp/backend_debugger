@@ -12,8 +12,16 @@ import 'package:grpc/grpc.dart';
 
 class GrpcSampleService extends GrpcService<SamplesServiceClient>
     implements ISampleService {
-  GrpcSampleService(Duration timeout, ClientChannel channel)
-      : super(timeout, channel, SamplesServiceClient(channel));
+  GrpcSampleService(
+    Duration timeout,
+    ClientChannel channel, [
+    CallOptions? options,
+  ]) : super(
+          timeout,
+          channel,
+          SamplesServiceClient(channel),
+          options,
+        );
 
   /// Store an image and its sample metadata
   @override
@@ -26,6 +34,7 @@ class GrpcSampleService extends GrpcService<SamplesServiceClient>
       TaskEither.tryCatch(
               () => stub.storeImageSample(
                     ImageSampleRequest(sample: sample, image: image),
+                    options: super.options,
                   ),
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
@@ -54,7 +63,10 @@ class GrpcSampleService extends GrpcService<SamplesServiceClient>
       // Order of operations is the following
       // Either<Exception, StatusCode> -> Either<Exception, Option<Exception>> -> Either<Exception, Unit> -> Option<Exception>
       TaskEither.tryCatch(
-              () => stub.updateSample(sample),
+              () => stub.updateSample(
+                    sample,
+                    options: super.options,
+                  ),
               (o, s) => RemoteServiceException(
                     // Catch the GrpcError and get its message as a RemoteServiceException
                     (o is GrpcError)

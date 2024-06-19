@@ -15,17 +15,24 @@ class GrpcDiagnosesService extends GrpcService<DiagnosesServiceClient>
   /// Create the [IDiagnosesService] given a [ClientChannel]
   GrpcDiagnosesService(
     Duration timeout,
-    ClientChannel channel,
-  ) : super(
+    ClientChannel channel, [
+    CallOptions? options,
+  ]) : super(
           timeout,
           channel,
           DiagnosesServiceClient(channel),
+          options,
         );
 
   @override
   Future<Either<CustomException, Diagnosis>> getDiagnosis(String uuid) =>
       TaskEither.tryCatch(
-              () => stub.getDiagnosis(DiagnosisRequest(uuid: uuid)),
+              () => stub.getDiagnosis(
+                    DiagnosisRequest(
+                      uuid: uuid,
+                    ),
+                    options: super.options,
+                  ),
               (o, s) => RemoteServiceException(
                     (o is GrpcError)
                         ? (o).message.toString()
@@ -42,7 +49,10 @@ class GrpcDiagnosesService extends GrpcService<DiagnosesServiceClient>
   @override
   Future<Option<CustomException>> storeDiagnosis(Diagnosis diagnosis) =>
       TaskEither.tryCatch(
-              () => stub.storeDiagnosis(diagnosis),
+              () => stub.storeDiagnosis(
+                    diagnosis,
+                    options: super.options,
+                  ),
               (o, s) => RemoteServiceException(
                     (o is GrpcError)
                         ? (o).message.toString()

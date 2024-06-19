@@ -7,11 +7,13 @@ class GrpcAnalysisService extends GrpcService<AnalysisServiceClient>
     implements IAnalysisService {
   GrpcAnalysisService(
     Duration timeout,
-    ClientChannel channel,
-  ) : super(
+    ClientChannel channel, [
+    CallOptions? options,
+  ]) : super(
           timeout,
           channel,
           AnalysisServiceClient(channel),
+          options,
         );
 
   /// Start a gRPC streamed analysis
@@ -22,8 +24,17 @@ class GrpcAnalysisService extends GrpcService<AnalysisServiceClient>
   ) =>
       stub.startAnalysis(
         request,
-        options: CallOptions(
-          metadata: {"from": from},
-        ),
+        options: options?.mergedWith(
+              CallOptions(
+                metadata: {
+                  "from": from,
+                },
+              ),
+            ) ??
+            CallOptions(
+              metadata: {
+                "from": from,
+              },
+            ),
       );
 }
