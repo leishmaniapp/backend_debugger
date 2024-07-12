@@ -33,7 +33,10 @@ class ServerConnectionRoute extends StatelessWidget {
           style: context.textStyles.headlineSmall,
           textAlign: TextAlign.center,
         ),
-        const Text("Use a connection URL containing the required protocol"),
+        const Text(
+          "Use a connection URL containing the required protocol",
+          textAlign: TextAlign.center,
+        ),
         TextField(
           controller: textController,
           keyboardType: TextInputType.url,

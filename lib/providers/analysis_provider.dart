@@ -58,7 +58,7 @@ class AnalysisProvider extends ProviderWithService<IAnalysisService> {
   /// Currently listening for reponses
   bool get listening => _responseSubscription != null;
 
-  // Start listening for reponses
+  /// Start listening for reponses
   void startListening(String from) {
     // If no analysis response
     _responseSubscription ??= service
@@ -74,6 +74,12 @@ class AnalysisProvider extends ProviderWithService<IAnalysisService> {
       // Notify children
       notifyListeners();
     });
+  }
+
+  /// Dismiss the gathered results
+  void dismissResults() {
+    responses.clear();
+    notifyListeners();
   }
 
   @override

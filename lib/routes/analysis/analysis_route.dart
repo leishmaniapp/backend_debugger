@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:awesome_flutter_extensions/awesome_flutter_extensions.dart';
+import 'package:backend_debugger/routes/analysis/expanded_results.dart';
 import 'package:backend_debugger/widgets/date_picker_widget.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:backend_debugger/dialogs/simple_ignore_dialog.dart';
@@ -132,8 +133,8 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
             ),
 
             // Select image button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              alignment: WrapAlignment.center,
               children: [
                 OutlinedButton.icon(
                   onPressed: () async {
@@ -163,6 +164,8 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
                     ? const Text("No file currently selected")
                     : Text(
                         "(${imageBytes?.length}) bytes loaded, file of type ($imageMime)",
+                        softWrap: true,
+                        overflow: TextOverflow.fade,
                       )),
               ].separatedBy(const SizedBox(
                 width: 12.0,
@@ -177,72 +180,66 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
             ),
 
             // Action buttons
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 2.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: () => widget.provider.disconnect(),
-                    icon: const Icon(Icons.power_off_rounded),
-                    label: const Text("Cancel connection"),
-                  ),
-                  FilledButton.icon(
-                    onPressed: () {
-                      try {
-                        // Validate the input
-                        if (diseaseTextController.text.isEmpty) {
-                          throw Exception("Disease cannot be emtpy");
-                        } else if (!Uuid.isValidUUID(
-                          fromString: diagnosisTextController.value.text,
-                        )) {
-                          throw Exception("Invalid UUID");
-                        }
-
-                        // Get the specialist
-                        final specialist =
-                            switch (context.read<AuthProvider>().specialist) {
-                          fp.Left(value: final l) => throw l,
-                          fp.Right(value: final r) => r,
-                        };
-
-                        // Build the request
-                        final request = AnalysisRequest(
-                          specialist: specialist.toRecord(),
-                          image: ImageBytes(
-                            data: imageBytes,
-                            mime: imageMime,
-                          ),
-                          metadata: ImageMetadata(
-                            sample: sampleTextController.text.toInt(),
-                            diagnosis: diagnosisTextController.text,
-                            disease: diseaseTextController.text,
-                            date: Int64(currentDateTime.unixtime),
-                          ),
-                        );
-
-                        // Send the request
-                        widget.provider.startListening(specialist.email);
-                        widget.provider.sendRequest(request);
-                      } catch (e, s) {
-                        GetIt.I.get<Logger>().e("Failed to request analysis",
-                            error: e, stackTrace: s);
-
-                        showDialog(
-                          context: context,
-                          builder: (context) => SimpleIgnoreDialog(
-                              const Text("Error parsing request"), Text("$e")),
-                        );
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: () => widget.provider.disconnect(),
+                  icon: const Icon(Icons.power_off_rounded),
+                  label: const Text("Cancel connection"),
+                ),
+                FilledButton.icon(
+                  onPressed: () {
+                    try {
+                      // Validate the input
+                      if (diseaseTextController.text.isEmpty) {
+                        throw Exception("Disease cannot be emtpy");
+                      } else if (!Uuid.isValidUUID(
+                        fromString: diagnosisTextController.value.text,
+                      )) {
+                        throw Exception("Invalid UUID");
                       }
-                    },
-                    icon: const Icon(Icons.send_time_extension_rounded),
-                    label: const Text("Send request"),
-                  )
-                ],
-              ),
+
+                      // Get the specialist
+                      final specialist =
+                          switch (context.read<AuthProvider>().specialist) {
+                        fp.Left(value: final l) => throw l,
+                        fp.Right(value: final r) => r,
+                      };
+
+                      // Build the request
+                      final request = AnalysisRequest(
+                        specialist: specialist.toRecord(),
+                        image: ImageBytes(
+                          data: imageBytes,
+                          mime: imageMime,
+                        ),
+                        metadata: ImageMetadata(
+                          sample: sampleTextController.text.toInt(),
+                          diagnosis: diagnosisTextController.text,
+                          disease: diseaseTextController.text,
+                          date: Int64(currentDateTime.unixtime),
+                        ),
+                      );
+
+                      // Send the request
+                      widget.provider.startListening(specialist.email);
+                      widget.provider.sendRequest(request);
+                    } catch (e, s) {
+                      GetIt.I.get<Logger>().e("Failed to request analysis",
+                          error: e, stackTrace: s);
+
+                      showDialog(
+                        context: context,
+                        builder: (context) => SimpleIgnoreDialog(
+                            const Text("Error parsing request"), Text("$e")),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.send_time_extension_rounded),
+                  label: const Text("Send request"),
+                )
+              ],
             ),
 
             const Divider(
@@ -251,7 +248,31 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
               thickness: 0,
             ),
 
-            /// Response block
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                FilledButton.icon(
+                  onPressed: () {
+                    widget.provider.dismissResults();
+                  },
+                  label: const Text("Clear data"),
+                  icon: const Icon(Icons.clear_all_rounded),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    context.navigator.push(
+                      MaterialPageRoute(
+                        builder: (_) => const ExpandedResults(),
+                      ),
+                    );
+                  },
+                  label: const Text("Expand results"),
+                  icon: const Icon(Icons.document_scanner),
+                ),
+              ],
+            ),
+
             (widget.provider.responses.isEmpty)
                 ? const Column(
                     mainAxisSize: MainAxisSize.max,
@@ -309,9 +330,13 @@ class _AnalysisRouteState extends State<AnalysisRoute> {
                               ),
                             ),
                           )
+                          .toList()
+                          .reversed
                           .toList(),
                     ),
                   ),
+
+            /// Response block
           ].separatedBy(
             const SizedBox(
               height: 16.0,

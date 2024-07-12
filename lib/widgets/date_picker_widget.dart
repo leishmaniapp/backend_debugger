@@ -93,7 +93,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                         currentDateTime = DateTime.now();
                         widget.onPick(currentDateTime);
                       }),
-                      child: const Text("Now"),
+                      child: const Icon(Icons.timer),
                     ),
                   ),
                 ].separatedBy(const SizedBox(width: 8.0)),
