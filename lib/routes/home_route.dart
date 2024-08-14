@@ -18,11 +18,11 @@ class HomeRoute extends StatelessWidget {
               style: context.textStyles.displayMedium,
             ),
             Text(
-              "Cloud analysis backend debugger",
+              "Analysis Backend Debugger",
               style: context.textStyles.headlineSmall,
               textAlign: TextAlign.center,
             ),
-            const Text("for the LeishmaniappCloudServicesV2 project"),
+            const Text("gRPC client for a protobuf_schema based backend"),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: FilledButton.icon(

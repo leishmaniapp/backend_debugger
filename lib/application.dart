@@ -24,6 +24,7 @@ class Application extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => AnalysisProvider()),
         ],
         builder: (context, child) => MaterialApp(
+          title: "Leishmaniapp Backend Debugger",
           theme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
