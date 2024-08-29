@@ -138,7 +138,7 @@ class ExpandedResults extends StatelessWidget {
                                                               const EdgeInsets
                                                                   .all(4.0),
                                                           child: Text(
-                                                            "(${e.x}, ${e.y})",
+                                                            "(${e.x}, ${e.y}, ${e.w}, ${e.h})",
                                                           ),
                                                         ),
                                                       ),
