@@ -54,7 +54,7 @@ class AuthTokenRoute extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: payload.isLeft()
                       ? context.colors.scheme.errorContainer
-                      : context.colors.scheme.background,
+                      : context.colors.scheme.surface,
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
                     color: payload.isLeft()

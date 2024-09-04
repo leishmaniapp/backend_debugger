@@ -151,23 +151,32 @@ class _StoreImageSampleRouteState extends State<StoreImageSampleRoute> {
                   children: [
                     OutlinedButton.icon(
                       onPressed: () async {
-                        // Get the selected file
-                        final fileResult =
-                            await FilePicker.platform.pickFiles();
-                        // If no file was selected
-                        if (fileResult == null) {
-                          return;
-                        }
+                        try {
+                          // Get the selected file
+                          final fileResult = await FilePicker.platform
+                              .pickFiles(type: FileType.image);
 
-                        // Read the file
-                        final file = File(fileResult.files.single.path!);
-                        // Read the bytes
-                        file.readAsBytes().then(
-                              (value) => setState(() {
-                                imageMime = lookupMimeType(file.path);
-                                imageBytes = value;
-                              }),
-                            );
+                          // If no file was selected
+                          if (fileResult == null) {
+                            return;
+                          }
+
+                          // Read the file
+                          final file = File(fileResult.files.single.path!);
+                          GetIt.I
+                              .get<Logger>()
+                              .i("Selected file: ${file.path}");
+                          // Read the bytes
+                          file.readAsBytes().then(
+                                (value) => setState(() {
+                                  imageMime = lookupMimeType(file.path);
+                                  imageBytes = value;
+                                }),
+                              );
+                        } catch (e, s) {
+                          GetIt.I.get<Logger>().e("Failed to pick image",
+                              error: e, stackTrace: s);
+                        }
                       },
                       icon: const Icon(Icons.image),
                       label: const Text("Pick a file"),
